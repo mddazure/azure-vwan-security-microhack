@@ -14,7 +14,7 @@
     virtual_wan_id      = azurerm_virtual_wan.microhack-vwan.id
     address_prefix      = "192.168.0.0/24"
   }
-  /*resource "azurerm_firewall" "microhack-we-hub-firewall" {
+  resource "azurerm_firewall" "microhack-we-hub-firewall" {
     name                = "microhack-we-hub-firewall"
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     location            = var.location-vwan-we-hub
@@ -26,7 +26,7 @@
     }
     firewall_policy_id = azurerm_firewall_policy.microhack-fw-we-child-policy.id
   }
-  resource "azurerm_vpn_gateway" "microhack-we-hub-vng" {
+  /*resource "azurerm_vpn_gateway" "microhack-we-hub-vng" {
     name                = "microhack-we-hub-vng"
     location            = var.location-vwan-we-hub
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
@@ -70,7 +70,7 @@
     virtual_wan_id      = azurerm_virtual_wan.microhack-vwan.id
     address_prefix      = "192.168.1.0/24"
   }
-  /*resource "azurerm_firewall" "microhack-useast-hub-firewall" {
+  resource "azurerm_firewall" "microhack-useast-hub-firewall" {
     name                = "microhack-useast-hub-firewall"
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     location            = var.location-vwan-useast-hub
@@ -82,7 +82,7 @@
     }
     firewall_policy_id = azurerm_firewall_policy.microhack-fw-useast-child-policy.id
   }
-    resource "azurerm_vpn_gateway" "microhack-useast-hub-vng" {
+   /* resource "azurerm_vpn_gateway" "microhack-useast-hub-vng" {
     name                = "microhack-useast-hub-vng"
     location            = var.location-vwan-useast-hub
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name

@@ -17,7 +17,7 @@ resource "azurerm_firewall_policy" "microhack-fw-we-child-policy" {
 
 resource "azurerm_firewall_policy" "microhack-fw-useast-child-policy" {
     name = "microhack-fw-useast-child-policy"
-    location = var.location-vwan-useast-hub
+    location = var.location-vwan-we-hub
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     base_policy_id = azurerm_firewall_policy.microhack-fw-parent-policy.id
     sku = "Premium"
