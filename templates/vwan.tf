@@ -18,7 +18,7 @@
     name                = "microhack-we-hub-firewall"
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     location            = var.location-vwan-we-hub
-    sku_name = "virtual_hub"
+    sku_name = "AZFW_Hub"
     sku_tier = "Premium"
     virtual_hub {
       virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
@@ -74,7 +74,7 @@
     name                = "microhack-useast-hub-firewall"
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     location            = var.location-vwan-useast-hub
-    sku_name = "virtual_hub"
+    sku_name = "AZFW_Hub"
     sku_tier = "Premium"
     virtual_hub {
       virtual_hub_id = azurerm_virtual_hub.microhack-useast-hub.id
