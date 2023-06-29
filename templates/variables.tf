@@ -13,7 +13,7 @@ default = "westeurope"
 variable "location-vwan-useast-hub" {
   description = "Location to deploy we hub"
   type        = string
-default = "useast"
+default = "eastus"
 }
 variable "location-spoke-1" {
   description = "Location to deploy spoke-1"
