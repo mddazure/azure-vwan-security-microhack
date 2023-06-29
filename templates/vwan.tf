@@ -21,7 +21,7 @@
     sku_name = "virtual_hub"
     sku_tier = "Premium"
     virtual_hub {
-      virtual_hub_id = microhack-we-hub.virtual_hub_id
+      virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
       public_ip_count = 1
     }
     firewall_policy_id = azurerm_firewall_policy.microhack-fw-we-child-policy.id
@@ -77,7 +77,7 @@
     sku_name = "virtual_hub"
     sku_tier = "Premium"
     virtual_hub {
-      virtual_hub_id = microhack-useast-hub.virtual_hub_id
+      virtual_hub_id = azurerm_virtual_hub.microhack-useast-hub.id
       public_ip_count = 1
     }
     firewall_policy_id = azurerm_firewall_policy.microhack-fw-useast-child-policy.id
