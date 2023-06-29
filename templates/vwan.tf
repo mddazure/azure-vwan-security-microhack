@@ -26,18 +26,19 @@
     }
     firewall_policy_id = azurerm_firewall_policy.microhack-fw-we-child-policy.id
   }
-  /*resource "azurerm_vpn_gateway" "microhack-we-hub-vng" {
+  resource "azurerm_vpn_gateway" "microhack-we-hub-vng" {
     name                = "microhack-we-hub-vng"
     location            = var.location-vwan-we-hub
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     virtual_hub_id      = azurerm_virtual_hub.microhack-we-hub.id
+    scale_unit = 1
     timeouts {
       create = "4h"
       update = "4h"
       read = "10m"
       delete = "4h"
     }
-  }*/
+  }
   resource "azurerm_virtual_hub_connection" "we-spoke1-conn" {
     name = "we-spoke1-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
@@ -82,18 +83,19 @@
     }
     firewall_policy_id = azurerm_firewall_policy.microhack-fw-useast-child-policy.id
   }
-   /* resource "azurerm_vpn_gateway" "microhack-useast-hub-vng" {
+   resource "azurerm_vpn_gateway" "microhack-useast-hub-vng" {
     name                = "microhack-useast-hub-vng"
     location            = var.location-vwan-useast-hub
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     virtual_hub_id      = azurerm_virtual_hub.microhack-useast-hub.id
+    scale_unit = 1
     timeouts {
       create = "4h"
       update = "4h"
       read = "10m"
       delete = "4h"
     }
-  }*/
+  }
     resource "azurerm_virtual_hub_connection" "useast-spoke3-conn" {
     name = "useast-spoke3-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-useast-hub.id
