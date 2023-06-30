@@ -790,12 +790,12 @@ resource "azurerm_public_ip" "nva-csr-vm-pub-ip"{
     }
 }
 resource "azurerm_network_interface" "nva-csr-vm-nic-1" {
-  name                 = "nva-iptables-vm-nic-1"
+  name                 = "nva-csr-vm-nic-1"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   enable_ip_forwarding = true
   ip_configuration {
-    name                          = "nva-1-ipconfig"
+    name                          = "nva-csr-1-ipconfig"
     subnet_id                     = azurerm_subnet.nva-subnet-1.id
     private_ip_address_allocation = "Static"
     private_ip_address = "172.16.20.10"
@@ -808,12 +808,12 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-1" {
   }
 }
 resource "azurerm_network_interface" "nva-csr-vm-nic-2" {
-  name                 = "nva-iptables-vm-nic-2"
+  name                 = "nva-csr-vm-nic-2"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   enable_ip_forwarding = true
   ip_configuration {
-    name                          = "nva-1-ipconfig"
+    name                          = "nva-csr-2-ipconfig"
     subnet_id                     = azurerm_subnet.nva-subnet-2.id
     private_ip_address_allocation = "Static"
     private_ip_address = "172.16.20.68"
