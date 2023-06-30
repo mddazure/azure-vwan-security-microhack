@@ -272,7 +272,7 @@ resource "azurerm_subnet" "bastion-nva-subnet" {
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
   address_prefixes       = ["172.16.20.160/27"]
 }
-/*
+
 #######################################################################
 ## Create Network Interface - Spoke 1
 #######################################################################
@@ -674,8 +674,8 @@ resource "azurerm_public_ip" "nva-iptables-vm-pub-ip"{
       microhack    = "vwan-security"
     }
 }
-resource "azurerm_network_security_group" "nva-iptables-vm-nsg"{
-    name = "nva-iptables-vm-nsg"
+resource "azurerm_network_security_group" "nva-nsg"{
+    name = "nva-nsg"
     location             = var.location-spoke-services
     resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
 
@@ -738,9 +738,9 @@ resource "azurerm_network_interface" "nva-iptables-vm-nic-1" {
     microhack    = "vwan-security"
   }
 }
-resource "azurerm_subnet_network_security_group_association" "nva-iptables-vm-nsg-ass" {
+resource "azurerm_subnet_network_security_group_association" "nva-nsg-ass" {
   subnet_id      = azurerm_subnet.nva-subnet-1.id
-  network_security_group_id = azurerm_network_security_group.nva-iptables-vm-nsg.id
+  network_security_group_id = azurerm_network_security_group.nva-nsg.id
 }
 
 #######################################################################
@@ -774,6 +774,85 @@ resource "azurerm_linux_virtual_machine" "nva-iptables-vm" {
     deployment  = "terraform"
     microhack    = "vwan-security"
   }
-}*/
+}
+#######################################################################
+## Create Network Interface - nva-csr-vm
+#######################################################################
+resource "azurerm_public_ip" "nva-csr-vm-pub-ip"{
+    name                 = "nva-csr-vm-pub-ip"
+    location             = var.location-spoke-services
+    resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+    allocation_method   = "Static"
+    tags = {
+      environment = "nva"
+      deployment  = "terraform"
+      microhack    = "vwan-security"
+    }
+}
+resource "azurerm_network_interface" "nva-csr-vm-nic-1" {
+  name                 = "nva-iptables-vm-nic-1"
+  location             = var.location-spoke-services
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  enable_ip_forwarding = true
+  ip_configuration {
+    name                          = "nva-1-ipconfig"
+    subnet_id                     = azurerm_subnet.nva-subnet-1.id
+    private_ip_address_allocation = "Static"
+    private_ip_address = "172.16.20.10"
+    public_ip_address_id = azurerm_public_ip.nva-csr-vm-pub-ip.id
+  }
+  tags = {
+    environment = "nva"
+    deployment  = "terraform"
+    microhack    = "vwan-security"
+  }
+}
+resource "azurerm_network_interface" "nva-csr-vm-nic-2" {
+  name                 = "nva-iptables-vm-nic-2"
+  location             = var.location-spoke-services
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  enable_ip_forwarding = true
+  ip_configuration {
+    name                          = "nva-1-ipconfig"
+    subnet_id                     = azurerm_subnet.nva-subnet-2.id
+    private_ip_address_allocation = "Static"
+    private_ip_address = "172.16.20.68"
+  }
+  tags = {
+    environment = "nva"
+    deployment  = "terraform"
+    microhack    = "vwan-security"
+  }
+}
+#######################################################################
+## Create Virtual Machine - CSR
+#######################################################################
+resource "azurerm_linux_virtual_machine" "nva-csr-vm" {
+  name                  = "nva-iptables-vm"
+  location              = var.location-spoke-services
+  resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  network_interface_ids = [azurerm_network_interface.nva-csr-vm-nic-1.id, azurerm_network_interface.nva-csr-vm-nic-2.id]
+  size               = var.vmsize
+  admin_username = var.username
+  admin_password = var.password
+  disable_password_authentication = false
+
+  source_image_reference {
+    publisher = "cisco"
+    offer = "cisco-csr-1000v"
+    sku = "16_12_5-byol"
+    version = "latest"
+  }
+  os_disk {
+    name              = "nva-csr-vm-osdisk"
+    caching           = "ReadWrite"
+    storage_account_type = "StandardSSD_LRS"
+  }  
+  tags = {
+    environment = "nva"
+    deployment  = "terraform"
+    microhack    = "vwan-security"
+  }
+}
 
 
