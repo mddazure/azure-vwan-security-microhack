@@ -837,6 +837,12 @@ resource "azurerm_linux_virtual_machine" "nva-csr-vm" {
   admin_password = var.password
   disable_password_authentication = false
 
+  plan {
+    name = "16_12_5-byol"
+    publisher = "cisco"
+    product = "cisco-csr-1000v"
+  }
+
   source_image_reference {
     publisher = "cisco"
     offer = "cisco-csr-1000v"
