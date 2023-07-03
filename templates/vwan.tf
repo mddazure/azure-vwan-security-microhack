@@ -22,8 +22,6 @@
     virtual_network_connection_id = azurerm_virtual_hub_connection.we-nva-conn.id
     depends_on = [azurerm_virtual_hub_connection.we-nva-conn]
   }
-
-  /*
   resource "azurerm_firewall" "microhack-we-hub-firewall" {
     name                = "microhack-we-hub-firewall"
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
@@ -49,7 +47,6 @@
       delete = "4h"
     }
   }
-  */
   resource "azurerm_virtual_hub_connection" "we-spoke1-conn" {
     name = "we-spoke1-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
@@ -82,7 +79,6 @@
     virtual_wan_id      = azurerm_virtual_wan.microhack-vwan.id
     address_prefix      = "192.168.1.0/24"
   }
-  /*
   resource "azurerm_firewall" "microhack-useast-hub-firewall" {
     name                = "microhack-useast-hub-firewall"
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
@@ -108,7 +104,6 @@
       delete = "4h"
     }
   }
-  */
     resource "azurerm_virtual_hub_connection" "useast-spoke3-conn" {
     name = "useast-spoke3-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-useast-hub.id
