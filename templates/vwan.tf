@@ -19,6 +19,8 @@
     virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
     peer_asn = 64000
     peer_ip = "172.16.20.10"
+    virtual_network_connection_id = azurerm_virtual_hub_connection.we-nva-conn.id
+    depends_on = [azurerm_virtual_hub_connection.we-nva-conn]
   }
 
   /*
