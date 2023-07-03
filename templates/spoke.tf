@@ -836,6 +836,9 @@ resource "azurerm_linux_virtual_machine" "nva-csr-vm" {
   admin_username = var.username
   admin_password = var.password
   disable_password_authentication = false
+  boot_diagnostics {
+    storage_account_uri = NULL
+  }
 
   plan {
     name = "16_12_5-byol"
