@@ -703,6 +703,17 @@ resource "azurerm_network_security_group" "nva-nsg"{
     destination_address_prefix = "*"
     }
     security_rule {
+    name                       = "bgp"
+    priority                   = 220
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "179"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+    }
+    security_rule {
     name                       = "icmp"
     priority                   = 220
     direction                  = "Inbound"
@@ -710,7 +721,7 @@ resource "azurerm_network_security_group" "nva-nsg"{
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "*"
-    source_address_prefix      = "*"
+    source_address_prefix      = "172.16.0.0/12,10.0.0.0/8"
     destination_address_prefix = "*"
     }
 
