@@ -721,7 +721,7 @@ resource "azurerm_network_security_group" "nva-nsg"{
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "*"
-    source_address_prefixes     = ["172.16.0.0/12,10.0.0.0/8"]
+    source_address_prefixes     = ["172.16.0.0/12","10.0.0.0/8"]
     destination_address_prefix = "*"
     }
 
