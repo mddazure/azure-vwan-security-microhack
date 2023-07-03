@@ -704,7 +704,7 @@ resource "azurerm_network_security_group" "nva-nsg"{
     }
     security_rule {
     name                       = "bgp"
-    priority                   = 220
+    priority                   = 230
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
