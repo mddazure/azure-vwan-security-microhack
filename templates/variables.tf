@@ -75,7 +75,7 @@ variable "username" {
 variable "password" {
   description = "Virtual Machine password, must meet Azure complexity requirements"
    type        = string
-   default     = "Microhack2020"
+   default     = "Microhack2023"
 }
 variable "vmsize" {
   description = "Size of the VMs"

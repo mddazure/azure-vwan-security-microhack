@@ -14,6 +14,13 @@
     virtual_wan_id      = azurerm_virtual_wan.microhack-vwan.id
     address_prefix      = "192.168.0.0/24"
   }
+  resource "azurerm_virtual_hub_bgp_connection" "we-bgpconn-1" {
+    name = "we-bgpconn"
+    virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
+    peer_asn = 64000
+    peer_ip = "172.16.20.10"
+  }
+
   /*
   resource "azurerm_firewall" "microhack-we-hub-firewall" {
     name                = "microhack-we-hub-firewall"
