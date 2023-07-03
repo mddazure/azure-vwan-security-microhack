@@ -272,7 +272,7 @@ resource "azurerm_subnet" "bastion-nva-subnet" {
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
   address_prefixes       = ["172.16.20.160/27"]
 }
-
+/*
 #######################################################################
 ## Create Network Interface - Spoke 1
 #######################################################################
@@ -659,7 +659,7 @@ resource "azurerm_windows_virtual_machine" "spoke-addc-vm" {
     deployment  = "terraform"
     microhack    = "vwan-security"
   }
-}
+}*/
 #######################################################################
 ## Create Network Interface - nva-iptables-vm
 #######################################################################
@@ -854,6 +854,7 @@ resource "azurerm_linux_virtual_machine" "nva-csr-vm" {
     caching           = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
   }  
+  custom_data = "U2VjdGlvbjogSU9TIGNvbmZpZ3VyYXRpb24KaG9zdG5hbWUgY3NyLW5hCmludGVyZmFjZSBHaWdhYml0RXRoZXJuZXQxCmlwIGFkZHJlc3MgMTcyLjE2LjIwLjEwIDI1NS4yNTUuMjU1LjE5MgppbnRlcmZhY2UgR2lnYWJpdEV0aGVybmV0MgppcCBhZGRyZXNzIDE3Mi4xNi4yMC42OCAyNTUuMjU1LjI1NS4xOTIKIWRlZmF1bHQgcm91dGUgcG9pbnRpbmcgdG8gR2lnRTEgd2hpY2ggaGFzIHB1YmxpYyBJUAppcCByb3V0ZSAwLjAuMC4wIDAuMC4wLjAgR2lnYWJpdEV0aGVybmV0MSAxNzIuMTYuMjAuMAohcmVtb3ZlIGRlZmF1bHQgcm91dGUgcG9pbnRpbmcgdG8gR2lnRTIKbm8gaXAgcm91dGUgMC4wLjAuMCAwLjAuMC4wIEdpZ2FiaXRFdGhlcm5ldDIgMTcyLjE2LjIwLjY0CiEgc3RhdGljIHJvdXRlIHRvIFZXQU4gSHViIHN1Ym5ldCBwb2ludGluZyB0byBDU1Igc3VibmV0IGRlZmF1bHQgZ2F0ZXdheSwgdG8gcHJldmVudCByZWN1cnNpdmUgcm91dGluZyBmYWlsdXJlIGZvciBWV0FOIEh1YiBlbmRwb2ludCBhZGRyZXNzZXMgbGVhcm5lZCB2aWEgQkdQIGZyb20gSHViCmlwIHJvdXRlIDE5Mi4xNjguMC4wIDI1NS4yNTUuMjU1LjAgMTcyLjE2LjIwLjY0CnJvdXRlciBiZ3AgNjQwMDAKbmVpZ2hib3IgMTkyLjE2OC4wLjY4IHJlbW90ZS1hcyA2NTUxNQpuZWlnaGJvciAxOTIuMTY4LjAuNjggZWJncC1tdWx0aWhvcCAyNTUKbmVpZ2hib3IgMTkyLjE2OC4wLjY5IHJlbW90ZS1hcyA2NTUxNQpuZWlnaGJvciAxOTIuMTY4LjAuNjkgZWJncC1tdWx0aWhvcCAyNTU="
   tags = {
     environment = "nva"
     deployment  = "terraform"
