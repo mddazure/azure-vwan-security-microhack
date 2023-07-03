@@ -272,7 +272,6 @@ resource "azurerm_subnet" "bastion-nva-subnet" {
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
   address_prefixes       = ["172.16.20.160/27"]
 }
-/*
 #######################################################################
 ## Create Network Interface - Spoke 1
 #######################################################################
@@ -659,7 +658,7 @@ resource "azurerm_windows_virtual_machine" "spoke-addc-vm" {
     deployment  = "terraform"
     microhack    = "vwan-security"
   }
-}*/
+}
 #######################################################################
 ## Create Network Interface - nva-iptables-vm
 #######################################################################
@@ -718,7 +717,7 @@ resource "azurerm_network_security_group" "nva-nsg"{
     priority                   = 220
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "Tcp"
+    protocol                   = "Icmp"
     source_port_range          = "*"
     destination_port_range     = "*"
     source_address_prefixes     = ["172.16.0.0/12","10.0.0.0/8"]

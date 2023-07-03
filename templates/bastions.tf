@@ -22,6 +22,7 @@ resource "azurerm_bastion_host" "bastion-spoke-1" {
     public_ip_address_id = azurerm_public_ip.bastion-spoke-1-pubip.id
   }
 }
+/*
 #######################################################################
 ## Create Bastion spoke-2
 #######################################################################
@@ -189,4 +190,4 @@ resource "azurerm_bastion_host" "bastion-nva" {
     subnet_id            = azurerm_subnet.bastion-nva-subnet.id
     public_ip_address_id = azurerm_public_ip.bastion-nva-pubip.id
   }
-}
+}*/
