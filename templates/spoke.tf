@@ -721,7 +721,7 @@ resource "azurerm_network_security_group" "nva-nsg"{
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "*"
-    source_address_prefix      = "172.16.0.0/12,10.0.0.0/8"
+    source_address_prefixes     = ["172.16.0.0/12,10.0.0.0/8"]
     destination_address_prefix = "*"
     }
 
@@ -810,7 +810,6 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-1" {
     subnet_id                     = azurerm_subnet.nva-subnet-1.id
     private_ip_address_allocation = "Static"
     private_ip_address = "172.16.20.10"
-    public_ip_address_id = azurerm_public_ip.nva-csr-vm-pub-ip.id
   }
   tags = {
     environment = "nva"
@@ -828,6 +827,7 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-2" {
     subnet_id                     = azurerm_subnet.nva-subnet-2.id
     private_ip_address_allocation = "Static"
     private_ip_address = "172.16.20.68"
+    public_ip_address_id = azurerm_public_ip.nva-csr-vm-pub-ip.id
   }
   tags = {
     environment = "nva"

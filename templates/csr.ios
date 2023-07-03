@@ -4,12 +4,12 @@ interface GigabitEthernet1
 ip address 172.16.20.10 255.255.255.192
 interface GigabitEthernet2
 ip address 172.16.20.68 255.255.255.192
-!default route pointing to GigE1 which has public IP
-ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 172.16.20.0
-!remove default route pointing to GigE2
-no ip route 0.0.0.0 0.0.0.0 GigabitEthernet2 172.16.20.64
+!default route pointing to GigE2 which has public IP
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet2 172.16.20.65
+!remove default route pointing to GigE1
+no ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 172.16.20.1
 ! static route to VWAN Hub subnet pointing to CSR subnet default gateway, to prevent recursive routing failure for VWAN Hub endpoint addresses learned via BGP from Hub
-ip route 192.168.0.0 255.255.255.0 172.16.20.64
+ip route 192.168.0.0 255.255.255.0 172.16.20.1
 router bgp 64000
 neighbor 192.168.0.68 remote-as 65515
 neighbor 192.168.0.68 ebgp-multihop 255
