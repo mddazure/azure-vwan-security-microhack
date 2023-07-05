@@ -16,7 +16,7 @@ resource "azurerm_resource_group" "vwan-microhack-spoke-rg" {
 }
 
 resource "azurerm_resource_group" "vwan-microhack-hub-rg" {
-  name     = "vwan-security-microhack-hub-rg-2"
+  name     = "vwan-security-microhack-hub-rg"
   location = var.location-vwan
  tags = {
     environment = "hub"
