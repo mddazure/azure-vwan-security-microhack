@@ -6,6 +6,8 @@
 
 [Lab](#lab)
 
+[Prequisites](#prerequisites)
+
 [Scenario 1](#scenario-1)
 
 [Scenario 2](#scenario-2)
