@@ -198,6 +198,7 @@ resource "azurerm_subnet" "onprem2-gateway-subnet" {
   virtual_network_name = azurerm_virtual_network.onprem2-vnet.name
   address_prefixes       = ["10.0.3.160/27"]
 }
+/*
 #######################################################################
 ## Create Virtual Network - Services
 #######################################################################
@@ -234,7 +235,7 @@ resource "azurerm_subnet" "bastion-services-subnet" {
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.services-vnet.name
   address_prefixes       = ["172.16.10.160/27"]
-}
+}*/
 #######################################################################
 ## Create Virtual Network - NVA
 #######################################################################
@@ -254,14 +255,14 @@ resource "azurerm_virtual_network" "nva-vnet" {
 ## Create Subnets - NVA
 #######################################################################
 
-resource "azurerm_subnet" "nva-subnet-1" {
-  name                 = "nva-subnet-1"
+resource "azurerm_subnet" "nva-trust-subnet" {
+  name                 = "nva-trust-subnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
   address_prefixes       = ["172.16.20.0/26"]
 }
-resource "azurerm_subnet" "nva-subnet-2" {
-  name                 = "nva-subnet-2"
+resource "azurerm_subnet" "nva-untrust-subnet" {
+  name                 = "nva-untrust-subnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
   address_prefixes       = ["172.16.20.64/26"]
@@ -271,6 +272,67 @@ resource "azurerm_subnet" "bastion-nva-subnet" {
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
   address_prefixes       = ["172.16.20.160/27"]
+}
+resource "azurerm_network_security_group" "nva-untrust-nsg"{
+    name = "nva--untrust-nsg"
+    location             = var.location-spoke-services
+    resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+
+   
+    security_rule {
+    name                       = "http"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+    }
+    security_rule {
+    name                       = "https"
+    priority                   = 210
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+    }
+    security_rule {
+    name                       = "bgp"
+    priority                   = 230
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "179"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+    }
+    security_rule {
+    name                       = "icmp"
+    priority                   = 220
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Icmp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefixes     = ["172.16.0.0/12","10.0.0.0/8"]
+    destination_address_prefix = "*"
+    }
+
+    tags = {
+      environment = "nva"
+      deployment  = "terraform"
+      microhack    = "vwan-security"
+    }
+}
+resource "azurerm_subnet_network_security_group_association" "nva-nsg-ass" {
+  subnet_id      = azurerm_subnet.untrust-subnet.id
+  network_security_group_id = azurerm_network_security_group.nva-untrust-nsg.id
 }
 #######################################################################
 ## Create Network Interface - Spoke 1
@@ -404,6 +466,7 @@ resource "azurerm_network_interface" "onprem2-nic" {
     microhack    = "vwan-security"
   }
 }
+/*
 #######################################################################
 ## Create Network Interface - ADDC
 #######################################################################
@@ -425,7 +488,7 @@ resource "azurerm_network_interface" "spoke-addc-1-nic" {
     deployment  = "terraform"
     microhack    = "vwan-security"
   }
-}
+}*/
 #######################################################################
 ## Create Virtual Machine spoke-1
 #######################################################################
@@ -626,6 +689,7 @@ resource "azurerm_windows_virtual_machine" "onprem2-vm" {
     microhack    = "vwan-security"
   }
 }
+/*
 #######################################################################
 ## Create Virtual Machine spoke-addc
 #######################################################################
@@ -658,7 +722,8 @@ resource "azurerm_windows_virtual_machine" "spoke-addc-vm" {
     deployment  = "terraform"
     microhack    = "vwan-security"
   }
-}
+}*/
+/*
 #######################################################################
 ## Create Network Interface - nva-iptables-vm
 #######################################################################
@@ -673,63 +738,7 @@ resource "azurerm_public_ip" "nva-iptables-vm-pub-ip"{
       microhack    = "vwan-security"
     }
 }
-resource "azurerm_network_security_group" "nva-nsg"{
-    name = "nva-nsg"
-    location             = var.location-spoke-services
-    resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
 
-   
-    security_rule {
-    name                       = "http"
-    priority                   = 200
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "80"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-    }
-    security_rule {
-    name                       = "https"
-    priority                   = 210
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "443"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-    }
-    security_rule {
-    name                       = "bgp"
-    priority                   = 230
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "179"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-    }
-    security_rule {
-    name                       = "icmp"
-    priority                   = 220
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Icmp"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefixes     = ["172.16.0.0/12","10.0.0.0/8"]
-    destination_address_prefix = "*"
-    }
-
-    tags = {
-      environment = "nva"
-      deployment  = "terraform"
-      microhack    = "vwan-security"
-    }
-}
 resource "azurerm_network_interface" "nva-iptables-vm-nic-1" {
   name                 = "nva-iptables-vm-nic-1"
   location             = var.location-spoke-services
@@ -737,9 +746,9 @@ resource "azurerm_network_interface" "nva-iptables-vm-nic-1" {
   enable_ip_forwarding = true
   ip_configuration {
     name                          = "nva-1-ipconfig"
-    subnet_id                     = azurerm_subnet.nva-subnet-1.id
+    subnet_id                     = azurerm_subnet.untrust-subnet.id
     private_ip_address_allocation = "Static"
-    private_ip_address = "172.16.20.4"
+    private_ip_address = "172.16.20.63"
     public_ip_address_id = azurerm_public_ip.nva-iptables-vm-pub-ip.id
   }
   tags = {
@@ -748,11 +757,6 @@ resource "azurerm_network_interface" "nva-iptables-vm-nic-1" {
     microhack    = "vwan-security"
   }
 }
-resource "azurerm_subnet_network_security_group_association" "nva-nsg-ass" {
-  subnet_id      = azurerm_subnet.nva-subnet-1.id
-  network_security_group_id = azurerm_network_security_group.nva-nsg.id
-}
-
 #######################################################################
 ## Create Virtual Machine - NVA
 #######################################################################
@@ -784,7 +788,7 @@ resource "azurerm_linux_virtual_machine" "nva-iptables-vm" {
     deployment  = "terraform"
     microhack    = "vwan-security"
   }
-}
+}*/
 #######################################################################
 ## Create Network Interface - nva-csr-vm
 #######################################################################
@@ -806,9 +810,9 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-1" {
   enable_ip_forwarding = true
   ip_configuration {
     name                          = "nva-csr-1-ipconfig"
-    subnet_id                     = azurerm_subnet.nva-subnet-1.id
+    subnet_id                     = azurerm_subnet.nva-trust-subnet.id
     private_ip_address_allocation = "Static"
-    private_ip_address = "172.16.20.10"
+    private_ip_address = "172.16.20.4"
   }
   tags = {
     environment = "nva"
@@ -823,7 +827,7 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-2" {
   enable_ip_forwarding = true
   ip_configuration {
     name                          = "nva-csr-2-ipconfig"
-    subnet_id                     = azurerm_subnet.nva-subnet-2.id
+    subnet_id                     = azurerm_subnet.nva-untrust-subnet.id
     private_ip_address_allocation = "Static"
     private_ip_address = "172.16.20.68"
     public_ip_address_id = azurerm_public_ip.nva-csr-vm-pub-ip.id
