@@ -37,7 +37,7 @@ The lab consists of a Virtual WAN with Secured Hubs in West Europe and US East, 
 
 Each of the Spoke and Branch VNETs contains a Virtual Machine running a basic web site. 
 
-The NVA VNET contains a Cisco CSR1000v router, which will be used to simulate an SD-WAN concentrator in a Spoke. During the course of the lab, an OPNSense Firewall deployed into the NVA VNET to secure outbound internet traffic.
+The NVA VNET contains a Cisco CSR1000v router, which will be used to simulate an SD-WAN concentrator in a Spoke. During the course of the lab, an OPNSense Firewall will be deployed into the NVA VNET to secure outbound internet traffic.
 
 The lab looks like this (with green components pre-deployed through Terraform (see [Prequisites](#prerequisites) below) and blue parts deployed during the scenarios):
 
