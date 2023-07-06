@@ -331,7 +331,7 @@ resource "azurerm_network_security_group" "nva-untrust-nsg"{
     }
 }
 resource "azurerm_subnet_network_security_group_association" "nva-nsg-ass" {
-  subnet_id      = azurerm_subnet.untrust-subnet.id
+  subnet_id      = azurerm_subnet.nva-untrust-subnet.id
   network_security_group_id = azurerm_network_security_group.nva-untrust-nsg.id
 }
 #######################################################################
