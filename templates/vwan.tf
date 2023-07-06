@@ -57,12 +57,14 @@
     virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
     remote_virtual_network_id = azurerm_virtual_network.spoke-2-vnet.id    
   }
+  /*
   resource "azurerm_virtual_hub_connection" "we-services-conn" {
     name = "we-services-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
     remote_virtual_network_id = azurerm_virtual_network.services-vnet.id    
   }
-    resource "azurerm_virtual_hub_connection" "we-nva-conn" {
+  */
+  resource "azurerm_virtual_hub_connection" "we-nva-conn" {
     name = "we-nva-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
     remote_virtual_network_id = azurerm_virtual_network.nva-vnet.id    
