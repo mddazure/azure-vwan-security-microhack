@@ -72,7 +72,7 @@ Steps:
   
   - Change directory:
   
-  `cd ./azure-vwan-security-microhack`
+  `cd ./azure-vwan-security-microhack/templates`
   - Initialize terraform and download the azurerm resource provider:
 
   `terraform init`
