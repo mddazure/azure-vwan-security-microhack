@@ -43,6 +43,8 @@ The lab looks like this (with green components pre-deployed through Terraform (s
 
 ![image](images/microhack-vwan-security.png)
 
+:exclamation: The resources deployed in this lab incur a combined charge of around $170 per day, so do remember to delete the environment when done!
+
 # Prerequisites
 To make the most of your time on this MircoHack, the lab in the diagram above is deployed and configured for you through Terraform. You will focus on enabling and inspecting network security through the Azure portal and Cloud Shell.
 ## Task 1: Deploy
@@ -83,6 +85,43 @@ Deployment takes approximately 30 minutes.
 
 
 # Scenario 1: Secure Private Traffic
+In this scenario, you will secure Spoke-to-Spoke and Branch-to-Spoke traffic accross Secured Hubs in different regions. 
+:exclamation: Remember - prior to Routing Intent, securing Spoke-to-Spoke and Branch-to-Spoke traffic through Azure Firewall was restricted to a single Hub; securing traffic across Hubs was not possible.
+
+## Task 1: Baseline
+Both Hubs have Azure Firewall deployed, but securing traffic through the firewalls is not yet configured.
+
+Connect to spoke-1-vm via Bastion, open a command prompt and attempt to connect to spoke-2-vm at 172.16.2.4 and spoke-3-vm at 172.16.3.4:
+
+`curl 172.16.2.4`
+
+`curl 172.16.3.4`
+
+❓ Does it connect?
+
+Check the routing on spoke-1-vm in Could Shell:
+
+`az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table`
+
+Look up the address of the firewall installed in the West Europe hub `microhack-we-hub-firewall`
+
+Observe the next hop for spoke-2-vnet (172.16.2.0/24), spoke-3-vnet (172.16.3.0/24), spoke-4-vnet (172.16.4.0/24).
+
+❓ Do the routes for the Spokes point to the firewall?
+
+## Task 2: Secure Spoke-to-Spoke traffic
+Navigate to the West Europe Hub and click Routing Policies.
+
+In the dropdown under Private Traffic, select Azure Firewall and under Next Hop Resource click `microhack-we-hub-firewall`, then click Save.
+
+Next, navigate to the US East Hub and again click Routing Policies. 
+
+In the dropdown under Private Traffic, select Azure Firewall and under Next Hop Resource click `microhack-useast-hub-firewall`, then click Save.
+
+
+
+
+
 
 # Scenario 2: Secure Internet Traffic
 
