@@ -47,3 +47,15 @@ resource "azurerm_public_ip" "vnet-gw-onprem2-pubip-1" {
       subnet_id                     = azurerm_subnet.onprem2-gateway-subnet.id
     }
   }
+  resource "azurerm_local_network_gateway" "lng-csr" {
+    name = "lng-csr"
+    location = var.location-onprem2
+    resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+    gateway_address = azurerm_public_ip.nva-csr-vm-pub-ip
+    bgp_settings {
+      asn = 64000
+      bgp_peering_address = azurerm_network_interface.nva-csr-vm-nic-2.private_ip_address
+    }
+
+    
+  }

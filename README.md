@@ -1,5 +1,7 @@
 # **Security in Azure Virtual WAN MicroHack**
 
+# Contents
+
 [Introduction](#introduction)
 
 [Objectives](#objectives)
@@ -8,17 +10,15 @@
 
 [Prequisites](#prerequisites)
 
-[Scenario 1](#scenario-1)
+[Scenario 1: Secure Private Traffic](#scenario-1-secure-private-traffic)
 
-[Scenario 2](#scenario-2)
+[Scenario 2: Secure Internet Traffic](#scenario-2-secure-internet-traffic)
 
-[Scenario 3](#scenario-3)
+[Scenario 3: SDWAN thriugh NVA in Spoke](#scenario-3-sdwan-through-nva-in-spoke)
 
-[Scenario 4](#scenario-4)
+[Scenario 4: Inther through Firewall in Spoke](#scenario-4-internet-through-firewall-in-spoke)
 
 [Close Out](#close-out)
-
-# Contents
 
 # Introduction
 This MicroHack demontrates the newly released [Routing Intent and Routing Policies](https://learn.microsoft.com/en-us/azure/virtual-wan/how-to-routing-policies) capabilities in Azure Virtual WAN. It is a sequel to [Routing in Azure Virtual WAN MicroHack](https://github.com/mddazure/azure-vwan-microhack), and it is recommended to complete Scenario's 1 - 3 of that MicroHack before starting this one.
@@ -82,13 +82,13 @@ Steps:
 Deployment takes approximately 30 minutes. 
 
 
-# Scenario 1
+# Scenario 1: Secure Private Traffic
 
-# Scenario 2
+# Scenario 2: Secure Internet Traffic
 
-# Scenario 3
+# Scenario 3: SDWAN through NVA in Spoke
 
-# Scenario 4
+# Scenario 4: Internet through Firewall in Spoke
 
 # Close Out
 

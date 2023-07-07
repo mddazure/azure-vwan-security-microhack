@@ -1,17 +1,75 @@
 Section: IOS configuration
 hostname csr-na
 interface GigabitEthernet1
-ip address 172.16.20.10 255.255.255.192
+ip address dhcp
 interface GigabitEthernet2
-ip address 172.16.20.68 255.255.255.192
+ip address dhcp
 !default route pointing to GigE2 which has public IP
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet2 172.16.20.65
 !remove default route pointing to GigE1
 no ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 172.16.20.1
 ! static route to VWAN Hub subnet pointing to CSR subnet default gateway, to prevent recursive routing failure for VWAN Hub endpoint addresses learned via BGP from Hub
 ip route 192.168.0.0 255.255.255.0 172.16.20.1
+! static routes for Onprem2 GatewaySubnet pointing to Tunnel101 and Tunnel102, so that Branch1GW BGP peer address is reachable
+ip route 10.0.3.164 255.255.255.255 Tunnel101
+ip route 10.0.3.165 255.255.255.255 Tunnel102
+!
 router bgp 64000
 neighbor 192.168.0.68 remote-as 65515
 neighbor 192.168.0.68 ebgp-multihop 255
 neighbor 192.168.0.69 remote-as 65515
 neighbor 192.168.0.69 ebgp-multihop 255
+neighbor 10.0.3.164 remote-as 64200
+neighbor 10.0.3.164 bgp-multihop 255
+neighbor 10.0.3.165 remote-as 64200
+neighbor 10.0.3.165 bgp-multihop 255
+!
+crypto ikev2 proposal azure-proposal-connectionS1HubCSR 
+ encryption aes-cbc-256 aes-cbc-128
+ integrity sha1 sha256
+ group 2
+!
+crypto ikev2 policy azure-policy-connectionS1HubCSR 
+ proposal azure-proposal-connectionS1HubCSR
+!Replace 1.1.1.1 and 1.1.1.2 with primary and seconday public IPs of vnet-gw-onprem2
+crypto ikev2 keyring azure-keyring
+ peer Onprem2VPNGWPubIpV41
+  address 1.1.1.1
+  pre-shared-key Microhack2023
+ peer Onprme2VPNGWPubIpV42
+  address 1.1.1.2
+  pre-shared-key Microhack2023
+!
+crypto ikev2 profile azure-profile-connectionOnprem2HubCSR
+ match address local interface GigabitEthernet1
+ match identity remote address 1.1.1.1 255.255.255.255 
+ match identity remote address 1.1.1.2 255.255.255.255 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local azure-keyring
+ lifetime 28800
+ dpd 10 5 on-demand
+!
+ crypto ipsec transform-set azure-ipsec-proposal-set esp-aes 256 esp-sha256-hmac 
+ mode tunnel
+!
+crypto ipsec profile azure-ipsec-onprem2
+ set security-association lifetime kilobytes 102400000
+ set transform-set azure-ipsec-proposal-set 
+ set ikev2-profile azure-profile-connectionOnprem2HubCSR
+!
+interface Tunnel101
+ ip address 10.0.100.4 255.255.255.254
+ ip tcp adjust-mss 1350
+ tunnel source GigabitEthernet2
+ tunnel mode ipsec ipv4
+ tunnel destination 1.1.1.1
+ tunnel protection ipsec profile azure-ipsec-onprem2
+!
+interface Tunnel102
+ ip address 10.0.100.6 255.255.255.254
+ ip tcp adjust-mss 1350
+ tunnel source GigabitEthernet2
+ tunnel mode ipsec ipv4
+ tunnel destination 1.1.1.2
+ tunnel protection ipsec profile azure-ipsec-onprem2
