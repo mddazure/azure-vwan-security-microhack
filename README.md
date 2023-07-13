@@ -23,13 +23,19 @@
 # Introduction
 This MicroHack demontrates the newly released [Routing Intent and Routing Policies](https://learn.microsoft.com/en-us/azure/virtual-wan/how-to-routing-policies) capabilities in Azure Virtual WAN. It is a sequel to [Routing in Azure Virtual WAN MicroHack](https://github.com/mddazure/azure-vwan-microhack), and it is recommended to complete Scenario's 1 - 3 of that MicroHack before starting this one.
 
-The lab starts with a dual Secured Hub Virtual WAN, with Spoke VNETs connected but no Security Policies configured. We will then enable policies to secure Private and Internet traffic through the firewalls in each Hub. Next, we add a branch connection (simulated by a VNET with a VPN Gateway). Then we add a Network Virtual Appliance in a spoke, and direct traffic outbound to internet through this device in stead of through the hub firewall. Finally, we connect a branch location to the NVA through VPN to simulate an SD-WAN, dynamically inject the SD-WAN IP space into VWAN and secure traffic to the SD-WAN connection through the Hub firewalls.
+The lab starts with a dual Secured Hub Virtual WAN, with Spoke VNETs connected but no Security Policies configured.
+
+You will then enable policies to secure Private and Internet traffic through the firewalls in each Hub. Next, you add branch connections (simulated by VNETs with a VPN Gateway).
+
+Then a Network Virtual Appliance in a spoke is added, and direct traffic outbound to internet through this device in stead of through the hub firewall. 
+
+Finally, a branch location is connected to the NVA through VPN to simulate an SD-WAN, dynamically inject the SD-WAN IP space into VWAN and secure traffic to the SD-WAN connection through the Hub firewalls.
 
 # Objectives
 After completing this MicroHack you will:
-- Understand traffic flow control through Secured Hubs with Azure Firewall 
-- Know how to enable Routing Intent and Private and Internet Routing Policies
-- Know how to leverage the Hub BGP capability to enable an NVA in a spoke
+- Understand traffic flow control through Secured Hubs with Azure Firewall. 
+- Know how to enable Routing Intent and Private and Internet Routing Policies.
+- Know how to leverage the Hub BGP capability to enable an NVA in a spoke.
 
 # Lab
 
@@ -136,16 +142,16 @@ Navigate to Firewall Policies and inspect each of the policies:
 
 ![image](images/firewall-policies.png)
 
-Modify `microhack-fw-parent-policy` so that connectity between spoke-1-vm and spoke-3-vm is no longer blocked by either firewall.
+Modify `microhack-fw-parent-policy` so that traffic between spoke-1-vm and spoke-3-vm is no longer blocked by either firewall.
 
 Now navigate back to the West Europe Hub and click Effective Routes. Under Choose resource type select Azure Firewall and under Resource `microhack-we-hub-firewall`:
 
 ![image](images/we-fw-eff-rts.png)
 
-Inspect the route table, observe routes for directly connected and cross-hub spoke routes,
+Inspect the route table, observe routes for directly connected and cross-hub spoke routes.
 
 ## Task 3: Secure Branch-to-Branch traffic
-Connect simulated Branch locations `onprem` and `onprem-2` by running these shell scripts from the `./azure-vwan-security-microhack/templates` directory in Cloud Shell:
+Connect simulated Branch locations `onprem` and `onprem-2` to the West Europe Hub, by running these shell scripts from the `./azure-vwan-security-microhack/templates` directory in Cloud Shell:
 
 `./connect-branch.sh`
 
@@ -159,13 +165,13 @@ Connect to onprem-vm via Bastion, open a command prompt and attempt to connect t
 
 :question: Does it connect?
 
-Simulated Branch locations onprem-vnet and onprem2-vnet are connected to the VPN Gateway on the West Europe hub.
-
 :question: Can you deduce where the connection from onprem-vm to onprem2-vm is blocked from the error message displayed?
 
-Before the Routing Intent update, traffic between Branch S2S VPN connections on the same gateway, would loop directly through the gateway and would not be inspected by the firewall in the Hub. 
+Simulated Branch locations onprem-vnet and onprem2-vnet are both connected to the VPN Gateway on the West Europe hub.
 
-:point_right: Post-RI, traffic from S2S and P2S VPN connections is forwarded from the gateway to the firewall, allowing Branch-to-Branch connectivity to be controlled centrally on the Hub firewall.
+Before the Routing Intent update, traffic between Branch S2S VPN connections on the same gateway would loop directly through the gateway and would not be inspected by the firewall in the Hub. 
+
+:point_right: Post-RI, traffic from S2S and P2S VPN connections is now forwarded from the gateway to the firewall, allowing Branch-to-Branch connectivity to be controlled centrally by the Hub firewall.
 
 ![image](images/b2b-via-fw.png)
 
