@@ -28,8 +28,8 @@ hubgwasn=$(az network vpn-gateway show --name microhack-we-hub-vng  -g vwan-secu
 echo "Hub GW BGP ASN:" $hubgwasn
 
 echo "# create local network gateway"
-az network local-gateway create -g vwan-security-microhack-spoke-rg -n lng2 --gateway-ip-address $hubgwtunneladdress --location westeurope --asn $hubgwasn --bgp-peering-address $hubgwbgpaddress
+az network local-gateway create -g vwan-security-microhack-spoke-rg -n lng2 --gateway-ip-address $hubgwtunneladdress --location swedencentral --asn $hubgwasn --bgp-peering-address $hubgwbgpaddress
 
 echo "# VNET GW: connect from vnet gw to local network gateway"
-az network vpn-connection create -n onprem2-to-we-hub --vnet-gateway1 vnet-gw-onprem2 -g vwan-security-microhack-spoke-rg --local-gateway2 lng2 -l westeurope --shared-key $sharedkey --enable-bgp
+az network vpn-connection create -n onprem2-to-we-hub --vnet-gateway1 vnet-gw-onprem2 -g vwan-security-microhack-spoke-rg --local-gateway2 lng2 -l swedencentral --shared-key $sharedkey --enable-bgp
 
