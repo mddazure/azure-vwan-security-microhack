@@ -136,7 +136,25 @@ Navigate to Firewall Policies and inspect each of the policies:
 
 ![image](images/firewall-policies.png)
 
-Modify `microhack-fw-parent-policy` so that connectity between spoke-1-vm and spoke-3-vm is no longer blocked by eithet firewall.
+Modify `microhack-fw-parent-policy` so that connectity between spoke-1-vm and spoke-3-vm is no longer blocked by either firewall.
+
+Now navigate back to the West Europe Hub and click Effective Routes. Under Choose resource type select Azure Firewall and under Resource `microhack-we-hub-firewall`:
+
+![image](images/we-fw-eff-rts.png)
+
+Inspect the route table, observe routes for directly connected and cross-hub spoke routes,
+
+## Task 3: Secure Branch traffic
+Connect simulated Branch locations `onprem` and `onprem-2` by running these shell scripts from the `./azure-vwan-security-microhack/templates` directory in Cloud Shell:
+
+`./connect-branch.sh`
+
+`./connect-branch2.sh`
+
+The scripts create VPN sites on the West Europe hub, and connect to the VNET Gateways in onprem-vnet and onprem2-vnet.
+
+
+
 
 
 # Scenario 2: Secure Internet Traffic
