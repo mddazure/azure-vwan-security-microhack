@@ -35,11 +35,11 @@ After completing this MicroHack you will:
 
 The lab consists of a Virtual WAN with Secured Hubs in West Europe and US East, 4 Spoke VNETs (2 in West Europe, 1 in US East and 1 US West), an NVA VNET in West-Europe and simulated Branch locations in North Europe and Sweden-Central.
 
-Each of the Spoke and Branch VNETs contains a Virtual Machine running a basic web site. 
+Each of the Spoke and Branch VNETs contains a Virtual Machine running a basic web site.
 
 The NVA VNET contains a Cisco CSR1000v router, which will be used to simulate an SD-WAN concentrator in a Spoke. During the course of the lab, an OPNSense Firewall will be deployed into the NVA VNET to secure outbound internet traffic.
 
-The lab looks like this (with green components pre-deployed through Terraform (see [Prequisites](#prerequisites) below) and blue parts deployed during the scenarios):
+The lab looks like this (with green components pre-deployed through Terraform, see [Prequisites](#prerequisites) below, and blue parts deployed during the scenarios):
 
 ![image](images/microhack-vwan-security.png)
 
@@ -91,11 +91,13 @@ In this scenario, you will secure Spoke-to-Spoke and Branch-to-Spoke traffic acc
 ## Task 1: Baseline
 Both Hubs have Azure Firewall deployed, but securing traffic through the firewalls is not yet configured.
 
-Connect to spoke-1-vm via Bastion, open a command prompt and attempt to connect to spoke-2-vm at 172.16.2.4 and spoke-3-vm at 172.16.3.4:
+Connect to spoke-1-vm via Bastion, open a command prompt and attempt to connect to the web server on spoke-2-vm at 172.16.2.4, spoke-3-vm at 172.16.3.4 and spoke-4-vm at 172.16.4.4:
 
 `curl 172.16.2.4`
 
 `curl 172.16.3.4`
+
+`curl 172.16.4.4`
 
 ❓ Does it connect?
 
@@ -110,17 +112,31 @@ Observe the next hop for spoke-2-vnet (172.16.2.0/24), spoke-3-vnet (172.16.3.0/
 ❓ Do the routes for the Spokes point to the firewall?
 
 ## Task 2: Secure Spoke-to-Spoke traffic
-Navigate to the West Europe Hub and click Routing Policies.
+Navigate to the West Europe Hub and click Routing Intent and Routing Policies.
 
 In the dropdown under Private Traffic, select Azure Firewall and under Next Hop Resource click `microhack-we-hub-firewall`, then click Save.
+
+![image](images/enable-ri-we.png)
 
 Next, navigate to the US East Hub and again click Routing Policies. 
 
 In the dropdown under Private Traffic, select Azure Firewall and under Next Hop Resource click `microhack-useast-hub-firewall`, then click Save.
 
+From spoke-1-vm, again attempt to spoke-2-vm at 172.16.2.4, spoke-3-vm at 172.16.3.4 and spoke-4-vm at 172.16.4.4:
 
+`curl 172.16.2.4`
 
+`curl 172.16.3.4`
 
+`curl 172.16.4.4`
+
+❓ Does it connect?
+
+Navigate to Firewall Policies and inspect each of the policies:
+
+![image](images/firewall-policies.png)
+
+Modify `microhack-fw-parent-policy` so that connectity between spoke-1-vm and spoke-3-vm is no longer blocked by eithet firewall.
 
 
 # Scenario 2: Secure Internet Traffic
