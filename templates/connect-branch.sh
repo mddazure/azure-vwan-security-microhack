@@ -31,5 +31,5 @@ echo "# create local network gateway"
 az network local-gateway create -g vwan-security-microhack-spoke-rg -n lng --gateway-ip-address $hubgwtunneladdress --location westeurope --asn $hubgwasn --bgp-peering-address $hubgwbgpaddress
 
 echo "# VNET GW: connect from vnet gw to local network gateway"
-az network vpn-connection create -n to-we-hub --vnet-gateway1 vnet-gw-onprem -g vwan-security-microhack-spoke-rg --local-gateway2 lng -l uksouth --shared-key $sharedkey --enable-bgp
+az network vpn-connection create -n onprem-to-we-hub --vnet-gateway1 vnet-gw-onprem -g vwan-security-microhack-spoke-rg --local-gateway2 lng -l uksouth --shared-key $sharedkey --enable-bgp
 
