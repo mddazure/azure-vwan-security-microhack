@@ -153,7 +153,7 @@ resource "azurerm_subnet" "bastion-onprem-subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.onprem-vnet.name
-  address_prefixes       = ["10.0.1.128/27"]
+  address_prefixes       = ["10.0.1.192/26"]
 }
 resource "azurerm_subnet" "onprem-gateway-subnet" {
   name                 = "GatewaySubnet"
@@ -190,7 +190,7 @@ resource "azurerm_subnet" "bastion-onprem2-subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.onprem2-vnet.name
-  address_prefixes       = ["10.0.3.128/27"]
+  address_prefixes       = ["10.0.3.192/26"]
 }
 resource "azurerm_subnet" "onprem2-gateway-subnet" {
   name                 = "GatewaySubnet"

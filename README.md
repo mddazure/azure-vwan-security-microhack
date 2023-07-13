@@ -144,7 +144,7 @@ Now navigate back to the West Europe Hub and click Effective Routes. Under Choos
 
 Inspect the route table, observe routes for directly connected and cross-hub spoke routes,
 
-## Task 3: Secure Branch traffic
+## Task 3: Secure Branch-to-Branch traffic
 Connect simulated Branch locations `onprem` and `onprem-2` by running these shell scripts from the `./azure-vwan-security-microhack/templates` directory in Cloud Shell:
 
 `./connect-branch.sh`
@@ -153,9 +153,23 @@ Connect simulated Branch locations `onprem` and `onprem-2` by running these shel
 
 The scripts create VPN sites on the West Europe hub, and connect to the VNET Gateways in onprem-vnet and onprem2-vnet.
 
+Connect to onprem-vm via Bastion, open a command prompt and attempt to connect to the web server on onprem2-vm at 10.0.3.4:
 
+`curl 10.0.3.4`
 
+:question: Does it connect?
 
+Simulated Branch locations onprem-vnet and onprem2-vnet are connected to the VPN Gateway on the West Europe hub.
+
+:question: Can you deduce where the connection from onprem-vm to onprem2-vm is blocked from the error message displayed?
+
+Before the Routing Intent update, traffic between Branch S2S VPN connections on the same gateway, would loop directly through the gateway and would not be inspected by the firewall in the Hub. 
+
+:point_right: Post-RI, traffic from S2S and P2S VPN connections is forwarded from the gateway to the firewall, allowing Branch-to-Branch connectivity to be controlled centrally on the Hub firewall.
+
+![image](images/b2b-via-fw.png)
+
+Navigate to Firewall Policies and update network rules in `microhack-fw-we-child-policy` to permit connectity from onprem-vnet to onprem2-vnet and v.v. 
 
 # Scenario 2: Secure Internet Traffic
 
