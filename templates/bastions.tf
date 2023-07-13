@@ -94,7 +94,7 @@ resource "azurerm_bastion_host" "bastion-spoke-4" {
     subnet_id            = azurerm_subnet.bastion-spoke-4-subnet.id
     public_ip_address_id = azurerm_public_ip.bastion-spoke-4-pubip.id
   }
-}
+}*/
 #######################################################################
 ## Create Bastion onprem
 #######################################################################
@@ -118,7 +118,7 @@ resource "azurerm_bastion_host" "bastion-onprem" {
     subnet_id            = azurerm_subnet.bastion-onprem-subnet.id
     public_ip_address_id = azurerm_public_ip.bastion-onprem-pubip.id
   }
-}
+}/*
 #######################################################################
 ## Create Bastion onprem2
 #######################################################################
