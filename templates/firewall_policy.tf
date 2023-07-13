@@ -23,8 +23,8 @@ resource "azurerm_firewall_policy" "microhack-fw-useast-child-policy" {
     sku = "Premium"
 }
 
-resource "azurerm_firewall_policy_rule_collection_group" "we-useast-rule-coll-grp" {
-    name = "we-useast-rule-coll-grp"
+resource "azurerm_firewall_policy_rule_collection_group" "parent-we-useast-rule-coll-grp" {
+    name = "parent-we-useast-rule-coll-grp"
     firewall_policy_id = azurerm_firewall_policy.microhack-fw-parent-policy.id
     priority = 500
     network_rule_collection {
@@ -49,8 +49,8 @@ resource "azurerm_firewall_policy_rule_collection_group" "we-useast-rule-coll-gr
   
 }
 
-resource "azurerm_firewall_policy_rule_collection_group" "we-rule-coll-grp" {
-    name = "we-rule-coll-grp"
+resource "azurerm_firewall_policy_rule_collection_group" "child-we-rule-coll-grp" {
+    name = "child-we-rule-coll-grp"
     firewall_policy_id = azurerm_firewall_policy.microhack-fw-we-child-policy.id
     priority = 600
     network_rule_collection {
@@ -58,30 +58,23 @@ resource "azurerm_firewall_policy_rule_collection_group" "we-rule-coll-grp" {
       priority = 200
       action = "Allow"
       rule {
-        name ="spoke1-spoke2,services"
+        name ="spoke1-spoke2"
         protocols                 = ["TCP", "UDP", "ICMP"]
-        source_addresses          = ["172.16.1.0/24"]
-        destination_addresses     = ["172.16.2.0/24","172.16.10.0/24"]
+        source_addresses          = ["172.16.1.0/24","172.16.2.0/24"]
+        destination_addresses     = ["172.16.2.0/24","172.16.1.0/24"]
         destination_ports         = ["80"]
       }
       rule {
         name = "spoke1-branches"
         protocols                 = ["TCP", "UDP", "ICMP"]
-        source_addresses          = ["172.16.1.0/24"]
-        destination_addresses     = ["10.0.1.0/24","10.0.21.0/24"]
-        destination_ports         = ["80"]
-      }
-            rule {
-        name = "branches"
-        protocols                 = ["TCP", "UDP", "ICMP"]
-        source_addresses          = ["10.0.1.0/24"]
-        destination_addresses     = ["10.0.21.0/24"]
+        source_addresses          = ["172.16.1.0/24","10.0.1.0/24","10.0.3.0/24"]
+        destination_addresses     = ["10.0.1.0/24","10.0.3.0/24","172.16.1.0/24"]
         destination_ports         = ["80"]
       }
     }
 }
-resource "azurerm_firewall_policy_rule_collection_group" "useast-rule-coll-grp" {
-    name = "useast-rule-coll-grp"
+resource "azurerm_firewall_policy_rule_collection_group" "child-useast-rule-coll-grp" {
+    name = "child-useast-rule-coll-grp"
     firewall_policy_id = azurerm_firewall_policy.microhack-fw-useast-child-policy.id
     priority = 700
     network_rule_collection {
