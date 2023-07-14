@@ -35,8 +35,8 @@ echo "Hub GW BGP ASN:" $hubgwasn
 
 echo "# create local network gateway"
 az network local-gateway create -g vwan-security-microhack-spoke-rg -n lng1-1 --gateway-ip-address $hubgwtunneladdress1 --location uksouth --asn $hubgwasn --bgp-peering-address $hubgwbgpaddress1
-az network local-gateway create -g vwan-security-microhack-spoke-rg -n lng2-2 --gateway-ip-address $hubgwtunneladdress2 --location uksouth --asn $hubgwasn --bgp-peering-address $hubgwbgpaddress2
+az network local-gateway create -g vwan-security-microhack-spoke-rg -n lng1-2 --gateway-ip-address $hubgwtunneladdress2 --location uksouth --asn $hubgwasn --bgp-peering-address $hubgwbgpaddress2
 
 echo "# VNET GW: connect from vnet gw to local network gateway"
-az network vpn-connection create -n onprem-to-we-hub --vnet-gateway1 vnet-gw-onprem -g vwan-security-microhack-spoke-rg --local-gateway2 lng1-1 -l uksouth --shared-key $sharedkey --enable-bgp
-az network vpn-connection create -n onprem-to-we-hub --vnet-gateway1 vnet-gw-onprem -g vwan-security-microhack-spoke-rg --local-gateway2 lng1-2 -l uksouth --shared-key $sharedkey --enable-bgp
+az network vpn-connection create -n onprem1-to-we-hub-1 --vnet-gateway1 vnet-gw-onprem -g vwan-security-microhack-spoke-rg --local-gateway2 lng1-1 -l uksouth --shared-key $sharedkey --enable-bgp
+az network vpn-connection create -n onprem1-to-we-hub-2 --vnet-gateway1 vnet-gw-onprem -g vwan-security-microhack-spoke-rg --local-gateway2 lng1-2 -l uksouth --shared-key $sharedkey --enable-bgp
