@@ -15,7 +15,7 @@ sharedkey="m1cr0hack"
 
 echo "# VWAN: Create remote site"
 az network vpn-site create --name onprem2 -g vwan-security-microhack-hub-rg --ip-address $vnetgwtunnelip1 --virtual-wan microhack-vwan --location swedencentral --device-model VNETGW --device-vendor Azure --asn $vnetgwasn --bgp-peering-address $vnetgwbgpip1 --link-speed 100 --with-link true
-az network vpn-site link add --name onpem2-2 -g vwan-security-microhack-hub-rg --ip-address $vnetgwtunnelip2 --site-name onprem2 --asn $vnetgwasn --bgp-peering-address $vnetgwbgpip2 --link-speed 100
+az network vpn-site link add --name onprem2-2 -g vwan-security-microhack-hub-rg --ip-address $vnetgwtunnelip2 --site-name onprem2 --asn $vnetgwasn --bgp-peering-address $vnetgwbgpip2 --link-speed 100
 
 echo "# VWAN: Create connection - remote site link to hub gw"
 az network vpn-gateway connection create --gateway-name microhack-we-hub-vng --name onprem2-connection  -g vwan-security-microhack-hub-rg --remote-vpn-site onprem2 --shared-key $sharedkey --enable-bgp true --no-wait
