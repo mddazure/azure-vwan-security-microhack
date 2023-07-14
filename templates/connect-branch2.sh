@@ -38,5 +38,5 @@ az network local-gateway create -g vwan-security-microhack-spoke-rg -n lng2-1 --
 az network local-gateway create -g vwan-security-microhack-spoke-rg -n lng2-2 --gateway-ip-address $hubgwtunneladdress2 --location swedencentral --asn $hubgwasn --bgp-peering-address $hubgwbgpaddress2
 
 echo "# VNET GW: connect from vnet gw to local network gateway"
-az network vpn-connection create -n onprem2-to-we-hub --vnet-gateway1 vnet-gw-onprem2 -g vwan-security-microhack-spoke-rg --local-gateway2 lng2-1 -l swedencentral --shared-key $sharedkey --enable-bgp
-az network vpn-connection create -n onprem2-to-we-hub --vnet-gateway1 vnet-gw-onprem2 -g vwan-security-microhack-spoke-rg --local-gateway2 lng2-2 -l swedencentral --shared-key $sharedkey --enable-bgp
+az network vpn-connection create -n onprem2-to-we-hub-1 --vnet-gateway1 vnet-gw-onprem2 -g vwan-security-microhack-spoke-rg --local-gateway2 lng2-1 -l swedencentral --shared-key $sharedkey --enable-bgp
+az network vpn-connection create -n onprem2-to-we-hub-2 --vnet-gateway1 vnet-gw-onprem2 -g vwan-security-microhack-spoke-rg --local-gateway2 lng2-2 -l swedencentral --shared-key $sharedkey --enable-bgp
