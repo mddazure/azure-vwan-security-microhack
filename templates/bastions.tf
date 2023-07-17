@@ -1,4 +1,4 @@
-#######################################################################
+/*#######################################################################
 ## Create Bastion spoke-1
 #######################################################################
 resource "azurerm_public_ip" "bastion-spoke-1-pubip" {
@@ -22,7 +22,6 @@ resource "azurerm_bastion_host" "bastion-spoke-1" {
     public_ip_address_id = azurerm_public_ip.bastion-spoke-1-pubip.id
   }
 }
-/*
 #######################################################################
 ## Create Bastion spoke-2
 #######################################################################
@@ -94,7 +93,7 @@ resource "azurerm_bastion_host" "bastion-spoke-4" {
     subnet_id            = azurerm_subnet.bastion-spoke-4-subnet.id
     public_ip_address_id = azurerm_public_ip.bastion-spoke-4-pubip.id
   }
-}*/
+}
 #######################################################################
 ## Create Bastion onprem
 #######################################################################
@@ -118,7 +117,7 @@ resource "azurerm_bastion_host" "bastion-onprem" {
     subnet_id            = azurerm_subnet.bastion-onprem-subnet.id
     public_ip_address_id = azurerm_public_ip.bastion-onprem-pubip.id
   }
-}/*
+}
 #######################################################################
 ## Create Bastion onprem2
 #######################################################################
@@ -142,7 +141,7 @@ resource "azurerm_bastion_host" "bastion-onprem2" {
     subnet_id            = azurerm_subnet.bastion-onprem2-subnet.id
     public_ip_address_id = azurerm_public_ip.bastion-onprem2-pubip.id
   }
-}
+}*/
 #######################################################################
 ## Create Bastion Services
 #######################################################################
@@ -167,6 +166,7 @@ resource "azurerm_bastion_host" "bastion-services" {
     public_ip_address_id = azurerm_public_ip.bastion-services-pubip.id
   }
 }
+/*
 #######################################################################
 ## Create Bastion NVA
 #######################################################################

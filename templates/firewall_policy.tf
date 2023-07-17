@@ -44,9 +44,15 @@ resource "azurerm_firewall_policy_rule_collection_group" "parent-we-useast-rule-
         source_addresses          = ["172.16.4.0/24"]
         destination_addresses     = ["172.16.1.0/24"]
         destination_ports         = ["80"]
+      }        
+      rule {
+        name ="rdp-from-services-to-all"
+        protocols                 = ["TCP"]
+        source_addresses          = ["172.16.10.0/24"]
+        destination_addresses     = ["*"]
+        destination_ports         = ["3389"]
       }
     }
-  
 }
 
 resource "azurerm_firewall_policy_rule_collection_group" "child-we-rule-coll-grp" {

@@ -178,8 +178,62 @@ Before the Routing Intent update, traffic between Branch S2S VPN connections on 
 Navigate to Firewall Policies and update network rules in `microhack-fw-we-child-policy` to permit connectity from onprem-vnet to onprem2-vnet and v.v. 
 
 # Scenario 2: Secure Internet Traffic
+You will now secure traffic outbound to internet through the firewall in each Hub. Next you will enable inbound connections from an external client to the web server on the VM in Spoke 1.
+
+## Task 1: Baseline
+Connect to spoke-1-vm via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
+
+`curl ipconfig.io`
+
+❓ Which IP address does it connect from? What resource does this address belong to?
+
+Check the routing on spoke-1-vm in Could Shell:
+
+`az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table`
+
+❓ Where does the default route point?
+
+## Task 2: Secure Internet traffic
+
+### Configure
+
+Navigate to the West Europe Hub and click Routing Intent and Routing Policies.
+
+In the dropdown under Internet Traffic, select Azure Firewall and under Next Hop Resource click `microhack-we-hub-firewall`, then click Save.
+
+![image](images/enable-internet-security.png)
+
+Next, navigate to the US East Hub and again click Routing Policies. 
+
+### Verify
+
+In the dropdown under Internet Traffic, select Azure Firewall and under Next Hop Resource click `microhack-useast-hub-firewall`, then click Save.
+
+From spoke-vm-1, again do `curl ipconfig.io`.
+
+❓ Which IP address does it connect from? What resource does this address belong to?
+
+Check the routing on spoke-1-vm in Could Shell:
+
+`az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table`
+
+❓ Where does the default route now point?
+
+Now connect to spoke-4-vm via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
+
+`curl ipconfig.io`
+
+❓ Which IP address does it connect from? What resource does this address belong to?
+
+Check the routing on spoke-4-vm in Could Shell:
+
+`az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-4-nic --output table`
+
+❓ Where does the default route point?
 
 # Scenario 3: SDWAN through NVA in Spoke
+
+
 
 # Scenario 4: Internet through Firewall in Spoke
 
