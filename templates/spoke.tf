@@ -31,8 +31,20 @@ resource "azurerm_subnet" "bastion-spoke-1-subnet" {
   virtual_network_name = azurerm_virtual_network.spoke-1-vnet.name
   address_prefixes       = ["172.16.1.128/26"]
 }
+resource "azurerm_network_security_group" "spoke-1-nsg"{
+    name = "spoke-1-nsg"
+    location             = var.location-spoke-services
+    resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+    security_rule = [  ]
+        tags = {
+      environment = "spoke-1"
+      deployment  = "terraform"
+      microhack    = "vwan-security"
+    }
+}
 resource "azurerm_subnet_network_security_group_association" "spoke-1-vm-subnet-nsg-ass" {
   network_security_group_id = azurerm_network_security_group.spoke-1-nsg.id
+  subnet_id = azurerm_subnet.spoke-1-vm-subnet.id
 }
 
 #######################################################################
@@ -346,17 +358,6 @@ resource "azurerm_public_ip" "spoke-1-vm-pub-ip"{
     resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
     allocation_method   = "Static"
     tags = {
-      environment = "spoke-1"
-      deployment  = "terraform"
-      microhack    = "vwan-security"
-    }
-}
-resource "azurerm_network_security_group" "spoke-1-nsg"{
-    name = "spoke-1-nsg"
-    location             = var.location-spoke-services
-    resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-    security_rule = [  ]
-        tags = {
       environment = "spoke-1"
       deployment  = "terraform"
       microhack    = "vwan-security"
