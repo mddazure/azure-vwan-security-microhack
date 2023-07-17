@@ -52,27 +52,28 @@
   resource "azurerm_virtual_hub_connection" "we-spoke1-conn" {
     name = "we-spoke1-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
-    remote_virtual_network_id = azurerm_virtual_network.spoke-1-vnet.id    
+    remote_virtual_network_id = azurerm_virtual_network.spoke-1-vnet.id 
+    internet_security_enabled = true     
   }
   resource "azurerm_virtual_hub_connection" "we-spoke2-conn" {
     name = "we-spoke2-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
-    remote_virtual_network_id = azurerm_virtual_network.spoke-2-vnet.id    
+    remote_virtual_network_id = azurerm_virtual_network.spoke-2-vnet.id
+    internet_security_enabled = true     
   }
-  /*
   resource "azurerm_virtual_hub_connection" "we-services-conn" {
     name = "we-services-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
     remote_virtual_network_id = azurerm_virtual_network.services-vnet.id    
-  }*/
+    internet_security_enabled = false
+  }
   
   resource "azurerm_virtual_hub_connection" "we-nva-conn" {
     name = "we-nva-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
-    remote_virtual_network_id = azurerm_virtual_network.nva-vnet.id    
+    remote_virtual_network_id = azurerm_virtual_network.nva-vnet.id
+    internet_security_enabled = false  
   }
-
-
   ###########################
   ### US East Secured Hub ###
   ###########################
@@ -112,9 +113,11 @@
     name = "useast-spoke3-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-useast-hub.id
     remote_virtual_network_id = azurerm_virtual_network.spoke-3-vnet.id    
+    internet_security_enabled = true 
   }
   resource "azurerm_virtual_hub_connection" "useast-spoke4-conn" {
     name = "useast-spoke4-conn"
     virtual_hub_id = azurerm_virtual_hub.microhack-useast-hub.id
     remote_virtual_network_id = azurerm_virtual_network.spoke-4-vnet.id    
+    internet_security_enabled = true 
   }
