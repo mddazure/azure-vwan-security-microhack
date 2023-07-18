@@ -205,9 +205,9 @@ In the dropdown under Internet Traffic, select Azure Firewall and under Next Hop
 
 Next, navigate to the US East Hub and again click Routing Policies. 
 
-### Verify
-
 In the dropdown under Internet Traffic, select Azure Firewall and under Next Hop Resource click `microhack-useast-hub-firewall`, then click Save.
+
+### Verify
 
 From spoke-vm-1, again do `curl ipconfig.io`.
 
@@ -233,7 +233,7 @@ Check the routing on spoke-4-vm in Could Shell:
 
 # Scenario 3: SDWAN through NVA in Spoke
 
-
+yes
 
 # Scenario 4: Internet through Firewall in Spoke
 
