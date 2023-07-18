@@ -1,3 +1,18 @@
+resource "azurerm_ip_group" "spoke-ip-group" {
+  name = "spoke-ip-group"
+  location = var.location-vwan-we-hub
+  resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
+  cidrs = ["172.16.1.0/24","172.16.2.0/24","172.16.3.0/24","172.16.4.0/24","172.16.10.0/24","172.16.20.0/24"]
+}
+
+resource "azurerm_ip_group" "branch-ip-group" {
+  name = "spoke-ip-group"
+  location = var.location-vwan-we-hub
+  resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
+  cidrs = ["10.0.1.0/24","10.0.2.0/24","10.0.3.0/24","10.0.4.0/24"]
+}
+
+
 resource "azurerm_firewall_policy" "microhack-fw-parent-policy" {
     name = "microhack-fw-parent-policy"
     location = var.location-vwan-we-hub
@@ -52,6 +67,17 @@ resource "azurerm_firewall_policy_rule_collection_group" "parent-we-useast-rule-
         destination_addresses     = ["*"]
         destination_ports         = ["3389"]
       }
+    }
+    application_rule_collection {
+      name = "we-useast-application-rule-coll"
+      priority = 500
+      action = "Allow" 
+      rule {
+        name = "internet"
+        source_ip_groups = [azurerm_ip_group.spoke-ip-group,azurerm_ip_group.branch-ip-group]
+        destination_fqdn_tags = ["Business","Computers + technology","Information security","General"]
+
+      }     
     }
 }
 

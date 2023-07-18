@@ -159,6 +159,7 @@ resource "azurerm_bastion_host" "bastion-services" {
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
   sku                 = "Standard"
   ip_connect_enabled =  true
+  shareable_link_enabled = true
 
   ip_configuration {
     name                 = "bastion-services-configuration"
