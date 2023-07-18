@@ -68,30 +68,6 @@ resource "azurerm_firewall_policy_rule_collection_group" "parent-we-useast-rule-
         destination_ports         = ["3389"]
       }
     }
-      network_rule_collection {
-      name = "we-useast-deny-private-network-rule-coll"
-      priority = 250
-      action = "Deny"
-      rule {
-        name ="spokes-branches"
-        protocols                 = ["TCP", "UDP", "ICMP"]
-        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
-        destination_ip_groups     = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
-        destination_ports         = ["*"]
-      }
-    }
-      network_rule_collection {
-      name = "we-useast-allow-any-network-rule-coll"
-      priority = 300
-      action = "Allow"
-      rule {
-        name ="any"
-        protocols                 = ["TCP", "UDP", "ICMP"]
-        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
-        destination_addresses     = ["*"]
-        destination_ports         = ["*"]
-      }
-    }
     application_rule_collection {
       name = "we-useast-application-rule-coll"
       priority = 500
@@ -131,6 +107,30 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-we-rule-coll-grp
         destination_ports         = ["80"]
       }
     }
+      network_rule_collection {
+      name = "we-deny-private-network-rule-coll"
+      priority = 250
+      action = "Deny"
+      rule {
+        name ="spokes-branches"
+        protocols                 = ["TCP", "UDP", "ICMP"]
+        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
+        destination_ip_groups     = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
+        destination_ports         = ["*"]
+      }
+    }
+      network_rule_collection {
+      name = "we-allow-any-network-rule-coll"
+      priority = 300
+      action = "Allow"
+      rule {
+        name ="any"
+        protocols                 = ["TCP", "UDP", "ICMP"]
+        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
+        destination_addresses     = ["*"]
+        destination_ports         = ["*"]
+      }
+    }
 }
 resource "azurerm_firewall_policy_rule_collection_group" "child-useast-rule-coll-grp" {
     name = "child-useast-rule-coll-grp"
@@ -154,6 +154,30 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-useast-rule-coll
         destination_addresses     = ["10.0.1.0/24","10.0.21.0/24"]
         destination_ports         = ["80"]
       }
+      network_rule_collection {
+      name = "useast-deny-private-network-rule-coll"
+      priority = 250
+      action = "Deny"
+      rule {
+        name ="spokes-branches"
+        protocols                 = ["TCP", "UDP", "ICMP"]
+        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
+        destination_ip_groups     = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
+        destination_ports         = ["*"]
+      }
+    }
+      network_rule_collection {
+      name = "useast-allow-any-network-rule-coll"
+      priority = 300
+      action = "Allow"
+      rule {
+        name ="any"
+        protocols                 = ["TCP", "UDP", "ICMP"]
+        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
+        destination_addresses     = ["*"]
+        destination_ports         = ["*"]
+      }
+    }
     }
   
 }
