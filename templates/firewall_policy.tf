@@ -6,7 +6,7 @@ resource "azurerm_ip_group" "spoke-ip-group" {
 }
 
 resource "azurerm_ip_group" "branch-ip-group" {
-  name = "spoke-ip-group"
+  name = "branch-ip-group"
   location = var.location-vwan-we-hub
   resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
   cidrs = ["10.0.1.0/24","10.0.2.0/24","10.0.3.0/24","10.0.4.0/24"]
