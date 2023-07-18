@@ -78,7 +78,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "parent-we-useast-rule-
         destination_fqdn_tags = ["Business","Computers + technology","Information security","General"]
         protocols {
           port = "80"
-          type = "https"
+          type = "Http"
           }
       }     
     }
