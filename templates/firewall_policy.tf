@@ -154,6 +154,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-useast-rule-coll
         destination_addresses     = ["10.0.1.0/24","10.0.21.0/24"]
         destination_ports         = ["80"]
       }
+    }
       network_rule_collection {
       name = "useast-deny-private-network-rule-coll"
       priority = 250
@@ -177,7 +178,5 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-useast-rule-coll
         destination_addresses     = ["*"]
         destination_ports         = ["*"]
       }
-    }
-    }
-  
+    } 
 }
