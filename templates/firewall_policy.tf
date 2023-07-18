@@ -74,7 +74,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "parent-we-useast-rule-
       action = "Allow" 
       rule {
         name = "internet"
-        source_ip_groups = [azurerm_ip_group.spoke-ip-group,azurerm_ip_group.branch-ip-group]
+        source_ip_groups = [azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.branch-ip-group.id]
         destination_fqdn_tags = ["Business","Computers + technology","Information security","General"]
 
       }     
