@@ -102,8 +102,8 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-we-rule-coll-grp
       rule {
         name = "spoke1-branches"
         protocols                 = ["TCP", "UDP", "ICMP"]
-        source_addresses          = ["172.16.1.0/24","10.0.1.0/24","10.0.3.0/24"]
-        destination_addresses     = ["10.0.1.0/24","10.0.3.0/24","172.16.1.0/24"]
+        source_addresses          = ["172.16.1.0/24"]
+        destination_addresses     = ["10.0.1.0/24","10.0.3.0/24"]
         destination_ports         = ["80"]
       }
     }
