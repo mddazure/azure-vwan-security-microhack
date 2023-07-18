@@ -83,7 +83,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "parent-we-useast-rule-
       network_rule_collection {
       name = "we-useast-allow-any-network-rule-coll"
       priority = 300
-      action = "AllowDeny"
+      action = "Allow"
       rule {
         name ="any"
         protocols                 = ["TCP", "UDP", "ICMP"]
