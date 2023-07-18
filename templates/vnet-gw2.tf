@@ -1,5 +1,5 @@
 #######################################################################
-## Create VNET Gateway - onprem
+## Create VNET Gateway - onprem2
 #######################################################################
 resource "azurerm_public_ip" "vnet-gw-onprem2-pubip-1" {
     name                = "vnet-gw-onprem2-pubip-1"
@@ -46,23 +46,4 @@ resource "azurerm_public_ip" "vnet-gw-onprem2-pubip-1" {
       private_ip_address_allocation = "Dynamic"
       subnet_id                     = azurerm_subnet.onprem2-gateway-subnet.id
     }
-  }
-  resource "azurerm_local_network_gateway" "lng-csr" {
-    name = "lng-csr"
-    location = var.location-onprem2
-    resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
-    gateway_address = azurerm_public_ip.nva-csr-vm-pub-ip.ip_address
-    bgp_settings {
-      asn = 64000
-      bgp_peering_address = azurerm_network_interface.nva-csr-vm-nic-2.private_ip_address
-    }    
-  }
-  resource "azurerm_virtual_network_gateway_connection" "to-csr" {
-    name = "to-csr"
-    location = var.location-onprem2
-    resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
-    type = "IPsec"
-    virtual_network_gateway_id = azurerm_virtual_network_gateway.vnet-gw-onprem2.id
-    local_network_gateway_id = azurerm_local_network_gateway.lng-csr.id
-    shared_key = "Microhack2023"    
   }
