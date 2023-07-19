@@ -220,7 +220,17 @@ resource "azurerm_network_security_group" "nva-untrust-nsg"{
     location             = var.location-spoke-services
     resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
 
-   
+    security_rule {
+    name                       = "in-from-vnet-gw-onprem3"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Any"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address-prefixes    = [azurerm_public_ip.vnet-gw-onprem3-pubip-1.ip_address,azurerm_public_ip.vnet-gw-onprem3-pubip-2.ip_address]
+    destination_address_prefix = "*"
+    }
     security_rule {
     name                       = "http"
     priority                   = 200

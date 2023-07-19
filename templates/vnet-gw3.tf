@@ -64,5 +64,6 @@ resource "azurerm_public_ip" "vnet-gw-onprem3-pubip-1" {
     type = "IPsec"
     virtual_network_gateway_id = azurerm_virtual_network_gateway.vnet-gw-onprem3.id
     local_network_gateway_id = azurerm_local_network_gateway.lng-csr.id
-    shared_key = "Microhack2023"    
+    shared_key = "Microhack2023"
+    enable_bgp = true
   }

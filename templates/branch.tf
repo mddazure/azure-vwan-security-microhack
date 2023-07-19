@@ -151,7 +151,28 @@ resource "azurerm_network_interface" "onprem2-nic" {
   }
 
   tags = {
-    environment = "onprem"
+    environment = "onprem2"
+    deployment  = "terraform"
+    microhack    = "vwan-security"
+  }
+}
+#######################################################################
+## Create Network Interface - Spoke onprem3
+#######################################################################
+resource "azurerm_network_interface" "onprem3-nic" {
+  name                 = "onprem3-nic"
+  location             = var.location-onprem3
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  enable_ip_forwarding = false
+
+  ip_configuration {
+    name                          = "onprem3-ipconfig"
+    subnet_id                     = azurerm_subnet.onprem3-vm-subnet.id
+    private_ip_address_allocation = "Dynamic"
+  }
+
+  tags = {
+    environment = "onprem3"
     deployment  = "terraform"
     microhack    = "vwan-security"
   }
@@ -217,7 +238,40 @@ resource "azurerm_windows_virtual_machine" "onprem2-vm" {
   }
 
   tags = {
-    environment = "onprem"
+    environment = "onprem2"
+    deployment  = "terraform"
+    microhack    = "vwan-security"
+  }
+}
+#######################################################################
+## Create Virtual Machine onprem3
+#######################################################################
+resource "azurerm_windows_virtual_machine" "onprem3-vm" {
+  name                  = "onprem3-vm"
+  location              = var.location-onprem3
+  resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  network_interface_ids = [azurerm_network_interface.onprem3-nic.id]
+  size               = var.vmsize
+  computer_name  = "onprem3-vm"
+  admin_username = var.username
+  admin_password = var.password
+  provision_vm_agent = true
+
+  source_image_reference {
+    offer     = "WindowsServer"
+    publisher = "MicrosoftWindowsServer"
+    sku       = "2022-datacenter-azure-edition"
+    version   = "latest"
+  }
+
+  os_disk {
+    name              = "onprem2-osdisk"
+    caching           = "ReadWrite"
+    storage_account_type = "StandardSSD_LRS"
+  }
+
+  tags = {
+    environment = "onprem3"
     deployment  = "terraform"
     microhack    = "vwan-security"
   }
