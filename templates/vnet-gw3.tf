@@ -56,7 +56,7 @@ resource "azurerm_public_ip" "vnet-gw-onprem3-pubip-1" {
       asn = 64000
       bgp_peering_address = azurerm_network_interface.nva-csr-vm-nic-2.private_ip_address
     }    
-  }/*
+  }
   resource "azurerm_virtual_network_gateway_connection" "to-csr" {
     name = "to-csr"
     location = var.location-onprem3
@@ -66,4 +66,4 @@ resource "azurerm_public_ip" "vnet-gw-onprem3-pubip-1" {
     local_network_gateway_id = azurerm_local_network_gateway.lng-csr.id
     shared_key = "Microhack2023"
     enable_bgp = true
-  }*/
+  }
