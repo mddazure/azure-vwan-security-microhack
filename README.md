@@ -351,6 +351,8 @@ Type exit multiple times, until the prompt shows csr#.
 Save the configuring with `copy run start`, confirm defaults.
 
 
+
+
 ## Task 2: Enable BGP peering with Hub
 Navigate to the West Europe Hub and click BGP Peers. Click + Add and enter details of the nva-csr-vm BGP peer.
 
