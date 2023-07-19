@@ -102,6 +102,23 @@ resource "azurerm_virtual_machine_extension" "install-iis-onprem2-vm" {
     }
 SETTINGS
 }
+##########################################################
+## Install IIS role on onprem3
+##########################################################
+resource "azurerm_virtual_machine_extension" "install-iis-onprem3-vm" {
+    
+  name                 = "install-iis-spoke-onprem3-vm"
+  virtual_machine_id   = azurerm_windows_virtual_machine.onprem3-vm.id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.9"
+
+   settings = <<SETTINGS
+    {
+        "commandToExecute":"powershell -ExecutionPolicy Unrestricted Add-WindowsFeature Web-Server; powershell -ExecutionPolicy Unrestricted Add-Content -Path \"C:\\inetpub\\wwwroot\\Default.htm\" -Value $($env:computername)"
+    }
+SETTINGS
+}
 /*
 ##########################################################
 ## Install ADDC role on spoke-addc-vm
