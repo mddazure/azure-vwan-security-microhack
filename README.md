@@ -328,6 +328,37 @@ You will now connect an SD-WAN connection to the Cisco CSR1000v router in nva-vn
 
 ![image](images/sd-wan.png)
 
+## Task 1: Configure CSR1000v NVA
+The CSR1000v NVA is deployed in nva-vnet as nva-csr-vm, but it still needs to be configured. The Cisco IOS configuration is contained in [csr.ios](/templates/csr.ios). The public IP addresses of vnet-gw-onprem3 need to be inserted into the ios configuration, and then the configuration must be copied into the CSR1000v through its command line interface.
+
+First, obtain the IP addresses of `vnet-gw-onprem3-pubip-1` and `vnet-gw-onprem3-pubip-2`, either from the portal, or from Cloud Shell through:
+
+  `az network public-ip show -g vwan-security-microhack-spoke-rg -n vnet-gw-onprem3-pubip-1 --query ipAddress`
+  `az network public-ip show -g vwan-security-microhack-spoke-rg -n vnet-gw-onprem3-pubip-2 --query ipAddress`
+
+Next, open [csr.ios](/templates/csr.ios) in a text editor and replace the strings "vnet-gw-onprem3-pubip1" and "vnet-gw-onprem3-pubip2" with these IP addresses.
+
+Log in to nva-csr-vm.
+
+:point_right: use Serial console in the portal as this does not rely on network connectivity in the VNET. Serial console is under Support + troubleshooting in the Virtual Machine blade.
+
+Enter Enable mode by typing en at the prompt, then enter Configuration mode by typing conf t.
+
+Copy and paste the configuration from the modified csr.ios file into the Serial console window, one block at a time.
+
+Type exit multiple times, until the prompt shows csr#.
+
+Save the configuring with `copy run start`, confirm defaults.
+
+
+## Task 2: Enable BGP peering with Hub
+Navigate to the West Europe Hub and click BGP Peers. Click + Add and enter details of the nva-csr-vm BGP peer.
+
+![image](images/csr-bgp.png)
+
+
+
+
 # Scenario 4: Internet through Firewall in Spoke
 
 # Close Out
