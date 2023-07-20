@@ -331,33 +331,51 @@ You will now connect an SD-WAN connection to the Cisco CSR1000v router in nva-vn
 ## Task 1: Configure CSR1000v NVA
 The CSR1000v NVA is deployed in nva-vnet as nva-csr-vm, but it still needs to be configured. The Cisco IOS configuration is contained in [csr.ios](/templates/csr.ios). The public IP addresses of vnet-gw-onprem3 need to be inserted into the ios configuration, and then the configuration must be copied into the CSR1000v through its command line interface.
 
-First, obtain the IP addresses of `vnet-gw-onprem3-pubip-1` and `vnet-gw-onprem3-pubip-2`, either from the portal, or from Cloud Shell through:
+- Obtain the IP addresses of `vnet-gw-onprem3-pubip-1` and `vnet-gw-onprem3-pubip-2`, either from the portal, or from Cloud Shell through:
 
   `az network public-ip show -g vwan-security-microhack-spoke-rg -n vnet-gw-onprem3-pubip-1 --query ipAddress`
   `az network public-ip show -g vwan-security-microhack-spoke-rg -n vnet-gw-onprem3-pubip-2 --query ipAddress`
 
-Next, open [csr.ios](/templates/csr.ios) in a text editor and replace the strings "vnet-gw-onprem3-pubip1" and "vnet-gw-onprem3-pubip2" with these IP addresses.
+- Open [csr.ios](/templates/csr.ios) in a text editor and replace the strings "vnet-gw-onprem3-pubip1" and "vnet-gw-onprem3-pubip2" with these IP addresses.
 
-Log in to nva-csr-vm.
+- Log in to nva-csr-vm.
 
-:point_right: use Serial console in the portal as this does not rely on network connectivity in the VNET. Serial console is under Support + troubleshooting in the Virtual Machine blade.
+   Use Serial console in the portal as this does not rely on network connectivity in the VNET. Serial console is under Support + troubleshooting in the Virtual Machine blade.
 
-Enter Enable mode by typing en at the prompt, then enter Configuration mode by typing conf t.
+- Enter Enable mode by typing `en` at the prompt, then enter Configuration mode by typing `conf t`.
 
-Copy and paste the configuration from the modified csr.ios file into the Serial console window, one block at a time.
+- Copy and paste the configuration from the modified csr.ios file into the Serial console window, one block at a time.
 
-Type exit multiple times, until the prompt shows csr#.
+- Type exit multiple times, until the prompt shows nva-vm-csr#.
 
-Save the configuring with `copy run start`, confirm defaults.
+  :point_right: Messages warning that BGP peers 192.168.0.68 and 192.168.0.69 are down will now be displayed in the console, because BGP is not yet configured on the West Europe VWAN Hub. This is the next Task. To suppress these warnings, type `no logging console`.
 
+- Save the configuration with `copy run start`, confirm defaults.
 
+Confirm the IPSec tunnels are connected:
+- Type `sh ip int brief` and verify Status and Protocol show "up" for  Tunnel101 and Tunnel102.
 
+Confirm routes are learned via BGP:
+- Type `sh ip bgp` and verify SDWAN (10.100.x.0/24) routes are present.
 
 ## Task 2: Enable BGP peering with Hub
 Navigate to the West Europe Hub and click BGP Peers. Click + Add and enter details of the nva-csr-vm BGP peer.
 
 ![image](images/csr-bgp.png)
 
+Nva-csr-vm already has matching BGP configuration, it was entered in the previous Task, so the BGP peerings will establish almost immediately.
+
+Inspect the routes learnt by the Hub: click Effective Routes, and in the drop downs select Azure Firewall and microhack-we-hub-firewall.
+
+ ❓ Can you explain Next Hop/Origin and Path for each route? Which routes are learned from nva-csr-vm? 
+
+
+
+
+Confirm routes are learned via BGP:
+- Type `sh ip bgp` and verify Spoke (172.16.x.0/24) and Branch (10.0.x.0/24) routes are now also present.
+
+  ❓ Can you explain the Path for each route?
 
 
 
