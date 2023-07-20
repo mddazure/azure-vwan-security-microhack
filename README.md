@@ -170,7 +170,7 @@ Next, navigate to the US East Hub and again click Routing Policies.
 
 In the dropdown under Private Traffic, select Azure Firewall and under Next Hop Resource click `microhack-useast-hub-firewall`, then click Save.
 
-From spoke-1-vm, again attempt to spoke-2-vm at 172.16.2.4, spoke-3-vm at 172.16.3.4 and spoke-4-vm at 172.16.4.4:
+From spoke-1-vm, again attempt connecting to spoke-2-vm at 172.16.2.4, spoke-3-vm at 172.16.3.4 and spoke-4-vm at 172.16.4.4:
 
 `curl 172.16.2.4`
 
@@ -367,15 +367,37 @@ Nva-csr-vm already has matching BGP configuration, it was entered in the previou
 
 Inspect the routes learnt by the Hub: click Effective Routes, and in the drop downs select Azure Firewall and microhack-we-hub-firewall.
 
- ❓ Can you explain Next Hop/Origin and Path for each route? Which routes are learned from nva-csr-vm? 
+❓ Can you explain the Next Hop/Origin and Path for each route? Which routes are learned from nva-csr-vm? 
 
+ Now select Route Tables and Default in drop downs.
 
+❓ Can you explain the routes shown?
 
+Log in to nva-scr-vm again.
 
 Confirm routes are learned via BGP:
 - Type `sh ip bgp` and verify Spoke (172.16.x.0/24) and Branch (10.0.x.0/24) routes are now also present.
 
-  ❓ Can you explain the Path for each route?
+❓ Can you explain the Path for each route?
+
+## Task 3: Verify connectivity
+Log on to onprem-3-vm at 10.100.10.4 via Bastion.
+
+Attempt to connect Spoke and Branch VMs:
+`curl 172.16.1.4`
+
+`curl 172.16.4.4`
+
+`curl 10.0.1.4`
+
+`curl 10.0.3.4`
+
+❓ Why do these connections fail?
+
+Modify Network rules in child policies microhack-fw-we-child-policy and microhack-fw-parent-policy so that the SDWAN can reach Spokes and Branches.
+
+
+
 
 
 
