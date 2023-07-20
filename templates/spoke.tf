@@ -304,12 +304,12 @@ resource "azurerm_route_table" "nva-untrust-udr" {
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
   route {
     name = "vnet-gw-onprem3-pubip-1"
-    address_prefix = azurerm_public_ip.vnet-gw-onprem3-pubip-1.ip_address
+    address_prefix = join("/",[azurerm_public_ip.vnet-gw-onprem3-pubip-1.ip_address,"32"])
     next_hop_type = "Internet"
   }
   route {
     name = "vnet-gw-onprem3-pubip-2"
-    address_prefix = azurerm_public_ip.vnet-gw-onprem3-pubip-2.ip_address
+    address_prefix = join("/",[azurerm_public_ip.vnet-gw-onprem3-pubip-2.ip_address,"32"])
     next_hop_type = "Internet"
   }
   route {
@@ -715,7 +715,7 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-2" {
     name                          = "nva-csr-2-ipconfig"
     subnet_id                     = azurerm_subnet.nva-untrust-subnet.id
     private_ip_address_allocation = "Static"
-    private_ip_address = "172.16.20.68"
+    private_ip_address = "172.16.20.36"
     public_ip_address_id = azurerm_public_ip.nva-csr-vm-pub-ip.id
   }
   tags = {
