@@ -166,8 +166,8 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-useast-rule-coll
       rule {
         name ="spokes-branches"
         protocols                 = ["TCP", "UDP", "ICMP"]
-        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
-        destination_ip_groups     = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
+        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.sdwan-ip-group.id]
+        destination_ip_groups     = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.sdwan-ip-group.id]
         destination_ports         = ["*"]
       }
     }
@@ -178,7 +178,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-useast-rule-coll
       rule {
         name ="any"
         protocols                 = ["TCP", "UDP", "ICMP"]
-        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
+        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.sdwan-ip-group.id]
         destination_addresses     = ["*"]
         destination_ports         = ["*"]
       }
