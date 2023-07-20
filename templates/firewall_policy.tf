@@ -118,8 +118,8 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-we-rule-coll-grp
       rule {
         name ="deny spokes-branches"
         protocols                 = ["TCP", "UDP", "ICMP"]
-        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.sdwan-ip-group]
-        destination_ip_groups     = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.sdwan-ip-group]
+        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.sdwan-ip-group.id]
+        destination_ip_groups     = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.sdwan-ip-group.id]
         destination_ports         = ["*"]
       }
     }
@@ -130,7 +130,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-we-rule-coll-grp
       rule {
         name ="allow to internet"
         protocols                 = ["TCP", "UDP", "ICMP"]
-        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.sdwan-ip-group]
+        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.sdwan-ip-group.id]
         destination_addresses     = ["*"]
         destination_ports         = ["*"]
       }
