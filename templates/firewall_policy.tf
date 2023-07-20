@@ -11,8 +11,12 @@ resource "azurerm_ip_group" "branch-ip-group" {
   resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
   cidrs = ["10.0.1.0/24","10.0.2.0/24","10.0.3.0/24","10.0.4.0/24"]
 }
-
-
+resource "azurerm_ip_group" "sdwan-ip-group" {
+  name = "sdwan-ip-group"
+  location = var.location-vwan-we-hub
+  resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
+  cidrs = ["10.100.10.0/24","10.100.20.0/24"]
+}
 resource "azurerm_firewall_policy" "microhack-fw-parent-policy" {
     name = "microhack-fw-parent-policy"
     location = var.location-vwan-we-hub
@@ -112,10 +116,10 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-we-rule-coll-grp
       priority = 250
       action = "Deny"
       rule {
-        name ="spokes-branches"
+        name ="deny spokes-branches"
         protocols                 = ["TCP", "UDP", "ICMP"]
-        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
-        destination_ip_groups     = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
+        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.branch-ip-group]
+        destination_ip_groups     = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.branch-ip-group]
         destination_ports         = ["*"]
       }
     }
@@ -124,9 +128,9 @@ resource "azurerm_firewall_policy_rule_collection_group" "child-we-rule-coll-grp
       priority = 300
       action = "Allow"
       rule {
-        name ="any"
+        name ="allow to internet"
         protocols                 = ["TCP", "UDP", "ICMP"]
-        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id]
+        source_ip_groups          = [azurerm_ip_group.branch-ip-group.id,azurerm_ip_group.spoke-ip-group.id,azurerm_ip_group.branch-ip-group]
         destination_addresses     = ["*"]
         destination_ports         = ["*"]
       }
