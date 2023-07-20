@@ -201,13 +201,25 @@ resource "azurerm_subnet" "nva-trust-subnet" {
   name                 = "nva-trust-subnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
-  address_prefixes       = ["172.16.20.0/26"]
+  address_prefixes       = ["172.16.20.0/27"]
 }
 resource "azurerm_subnet" "nva-untrust-subnet" {
   name                 = "nva-untrust-subnet"
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   virtual_network_name = azurerm_virtual_network.nva-vnet.name
-  address_prefixes       = ["172.16.20.64/26"]
+  address_prefixes       = ["172.16.20.32/27"]
+}
+resource "azurerm_subnet" "opnsense-trust-subnet" {
+  name                 = "opnsense-trust-subnet"
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  virtual_network_name = azurerm_virtual_network.nva-vnet.name
+  address_prefixes       = ["172.16.20.64/27"]
+}
+resource "azurerm_subnet" "opnsense-untrust-subnet" {
+  name                 = "opnsense-untrust-subnet"
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  virtual_network_name = azurerm_virtual_network.nva-vnet.name
+  address_prefixes       = ["172.16.20.96/27"]
 }
 resource "azurerm_subnet" "bastion-nva-subnet" {
   name                 = "AzureBastionSubnet"
@@ -285,6 +297,27 @@ resource "azurerm_network_security_group" "nva-untrust-nsg"{
 resource "azurerm_subnet_network_security_group_association" "nva-nsg-ass" {
   subnet_id      = azurerm_subnet.nva-untrust-subnet.id
   network_security_group_id = azurerm_network_security_group.nva-untrust-nsg.id
+}
+resource "azurerm_route_table" "nva-untrust-udr" {
+  name = "nva-untrust-udr"
+  location            = var.location-spoke-services
+  resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  route {
+    name = "vnet-gw-onprem3-pubip-1"
+    address_prefix = azurerm_public_ip.vnet-gw-onprem3-pubip-1.ip_address
+    next_hop_type = "Internet"
+  }
+  route {
+    name = "vnet-gw-onprem3-pubip-2"
+    address_prefix = azurerm_public_ip.vnet-gw-onprem3-pubip-2.ip_address
+    next_hop_type = "Internet"
+  }
+  route {
+    name = "internet-via-opnsense"
+    address_prefix = "0.0.0.0/0"
+    next_hop_type = "VirtualAppliance"
+    next_hop_in_ip_address = "172.16.20.68"
+  }
 }
 #######################################################################
 ## Create Network Interface - Spoke 1
