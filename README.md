@@ -223,7 +223,7 @@ Navigate to Firewall Policies and update network rules in `microhack-fw-we-child
 You will now secure traffic outbound to internet through the firewall in each Hub. Next you will enable inbound connections from an external client to the web server on the VM in Spoke 4.
 
 ## Task 1: Baseline
-Connect to spoke-1-vm via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
+Connect to spoke-1-vm at 172.16.1.4 via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
 
 `curl ipconfig.io`
 
@@ -234,6 +234,12 @@ Check the routing on spoke-1-vm in Could Shell:
 `az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table`
 
 ❓ Where does the default route point?
+
+Connect to onprem-vm at 10.0.1.4 via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
+
+`curl ipconfig.io`
+
+❓ Which IP address does it connect from? What resource does this address belong to?
 
 ## Task 2: Secure outbound
 
@@ -267,11 +273,19 @@ Now connect to spoke-4-vm via Bastion, open a command prompt and obtain the outb
 
 ❓ Which IP address does it connect from? What resource does this address belong to?
 
-Check the routing on spoke-4-vm in Could Shell:
+Check the routing on spoke-4-vm in Cloud Shell:
 
 `az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-4-nic --output table`
 
 ❓ Where does the default route point?
+
+Connect to onprem-vm at 10.0.1.4 via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
+
+`curl ipconfig.io`
+
+❓ Which IP address does it connect from? Why is the outbound address for this Branch different from the outbound address of the Spokes?
+
+:point_right: Inspect the VPN connection properties: from microhack-we-secured-hub in the portal, navigate to VPN (Site to site), click the elipsis (...) to the right of VPN site onprem1, click Edit VPN connection and look at the selector switches. What should be changed to route internet traffic from the Branch through the Hub firewall?
 
 ## Task 3: Secure inbound
 
@@ -396,12 +410,51 @@ Attempt to connect Spoke and Branch VMs:
 
 Modify Network rules in child policies microhack-fw-we-child-policy and microhack-fw-parent-policy so that the SDWAN can reach Spokes and Branches.
 
+:point_right: IP Groups for Spoke, Branch and SDWAN prefixes are pre-provisioned and located in the Hub resource group.
 
+Connect to onprem-3-vm at 10.100.10.4 via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
 
+`curl ipconfig.io`
 
+❓ Which IP address does it connect from? Why is the outbound address of the SDWAN site different from the outbound address of the Spokes?
 
+:point_right: Inspect the Effective routes of onprem-3-vm in the portal or in Cloud Shell with
+`az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n onprem3-nic --output table`
+What is the next hop for 0.0.0.0/0?
 
 # Scenario 4: Internet through Firewall in Spoke
+You will now deploy add OPNsense firewall into the nva-vnet. Outbound internet traffic from Spokes, Branches and SDWAN will be directed through the CSR1000v router and through the OPNsense firewall in stead of through the Hub firewalls.
+
+![image](images/internet-via-opnsense.png)
+
+## Task 1: Deploy OPNsense NVA
+This task leverages Daniel Mauser's excellent [OPNsense NVA Firewall in Azure](https://github.com/dmauser/opnazure) lab.
+
+In Cloud Shell, accept the usage terms of FreeBSD Linux:
+ 
+`az vm image terms accept --urn thefreebsdfoundation:freebsd-13_1:13_1-release:13.1.0 -o none`
+
+Then click the button initiate the template:
+
+[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdmauser%2Fopnazure%2Fmaster%2FARM%2Fmain.json%3F/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Fdmauser%2Fopnazure%2Fmaster%2Fbicep%2FuiFormDefinition.json)
+
+Complete the configuration screens as shown here:
+
+![image](images/opnsense-deployment-settings.png)
+
+![image](images/opnsense-vm-settings.png)
+
+![image](images/opnsense-vnet-settings.png)
+
+Review summary on the final screen, and click Create at the bottom:
+
+![image](images/opnsense-review-create.png)
+
+When the deployment completes, browse to the NVA's public IP address ( OPNsense-PublicIP).
+- Username: root
+- Password: opnsense (lowercase)
+
+
 
 # Close Out
 
