@@ -338,7 +338,7 @@ resource "azurerm_route_table" "opnsense-trust-udr" {
 #######################################################################
 resource "azurerm_public_ip" "spoke-1-vm-pub-ip"{
     name                 = "spoke-1-vm-pub-ip"
-    location             = var.location-spoke-services
+    location             = var.location-spoke-1
     resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
     allocation_method   = "Static"
     tags = {
@@ -362,6 +362,18 @@ resource "azurerm_network_interface" "spoke-1-nic" {
     environment = "spoke-1"
     deployment  = "terraform"
     microhack    = "vwan-security"
+  }
+}
+resource "azurerm_route_table" "spoke-1-udr" {
+  name = "spoke-we-udr"
+  location            = var.location-spoke-1
+  resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  disable_bgp_route_propagation = true
+  route {
+    name = "degault-via-hub"
+    address_prefix = "0.0.0.0/0"
+    next_hop_type = "VirtualAppliance"
+    next_hop_in_ip_address = "192.168.0.132"
   }
 }
 #######################################################################
