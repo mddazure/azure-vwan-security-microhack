@@ -319,6 +319,20 @@ resource "azurerm_route_table" "nva-untrust-udr" {
     next_hop_in_ip_address = "172.16.20.68"
   }
 }
+resource "azurerm_route_table" "opnsense-trust-udr" {
+  name = "opnsense-trust-udr"
+  location            = var.location-spoke-services
+  resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  disable_bgp_route_propagation = true
+  route {
+    name = "all-via-csr"
+    address_prefix = "0.0.0.0/0"
+    next_hop_type = "VirtualAppliance"
+    next_hop_in_ip_address = "172.16.20.36"
+  }
+}
+
+
 #######################################################################
 ## Create Network Interface - Spoke 1
 #######################################################################

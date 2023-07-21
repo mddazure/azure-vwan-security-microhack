@@ -423,11 +423,20 @@ Connect to onprem-3-vm at 10.100.10.4 via Bastion, open a command prompt and obt
 What is the next hop for 0.0.0.0/0?
 
 # Scenario 4: Internet through Firewall in Spoke
-You will now deploy add OPNsense firewall into the nva-vnet. Outbound internet traffic from Spokes, Branches and SDWAN will be directed through the CSR1000v router and through the OPNsense firewall in stead of through the Hub firewalls.
+You will now deploy add OPNsense firewall into the nva-vnet. Outbound internet traffic from Spokes, Branches and SDWAN will be directed through the CSR1000v router and through the OPNsense firewall, in stead of through the Hub firewalls.
 
 ![image](images/internet-via-opnsense.png)
 
-## Task 1: Deploy OPNsense NVA
+## Task 1: Remove Routing Policy for Internet traffic
+This task takes a while to complete.
+
+Navigate to the West Europe Hub and click Routing Intent and Routing Policies.
+
+In the dropdown under Internet Traffic, select None, then click Save.
+
+Do the same for the US East Hub.
+
+## Task 2: Deploy OPNsense NVA
 This task leverages Daniel Mauser's excellent [OPNsense NVA Firewall in Azure](https://github.com/dmauser/opnazure) lab.
 
 In Cloud Shell, accept the usage terms of FreeBSD Linux:
@@ -454,7 +463,57 @@ When the deployment completes, browse to the NVA's public IP address ( OPNsense-
 - Username: root
 - Password: opnsense (lowercase)
 
+## Task 3: Advertise default route from CSR1000v NVA
 
+### Configure nva-csr-vm
+The CSR will now advertise the default route both into the West Europe Hub and toward the SDWAN site. All internet traffic will flow to the CSR, and it will route it out it's "outside" interface, GigabitEthernet2.
+
+Log on to nva-csr-vm via Serial console.
+
+Type `en` to enter enablement mode. The route already has a default route pointing to GigebitEthernet2, verify this by inspecting the routing table with `sh ip route`. 
+
+However, this route is not advertised over BGP, verify this by inspecting advertised routes to one of the BGP peers with `sh ip bgp neighbors 192.168.0.68 adverised-routes`.
+
+To start advertising the default route, a network statement needs to be added to the bgp configuration.
+
+Type `conf t` to enter configuration mode, then `router bgp 64000`.
+Then type `network 0.0.0.0 mask 0.0.0.0` and `exit`.
+
+Verify that the default route is now advertised by again inspecting routes advertised to BGP peers.
+
+Save the configuration with `copy run start`.
+
+### Verify
+Verify that the default route is learned by the West Europe Hub.
+
+Navigate to the West Europe Hub and click Effective Routes. Under Choose resource type select Azure Firewall and under Resource microhack-we-hub-firewall.
+
+The default route should be lsited with Next Hop Type HubBgpConnection and Next Hop the BGP connection to the CSR.
+
+![image](images/west-europe-default-route.png)
+
+Now go the East US Hub and inspect the firewall effective routes.
+
+![image](images/us-east-default-route.png).
+
+Note that the default route points directly to Internet.
+
+:point_right: The default route is not advertised between Hubs. Cross-hub internet access is not possible and aach Hub must implement its own, local internet break out facility.
+
+### User Defined Route
+As we want outbound traffic to be secured by the OPNsense firewall, we need a UDR on the nva-untrusted subnet to push the traffic to the firewall's trusted or inside interface. However, the SDWAN IPSec tunnel traffic should not be firewalled, so the UDR must contain an explicit route to send traffic for `vnet-gw-onprem3` to the internet directly.
+
+![image](images/nva-udr.png)
+
+The UDR is pre-provisioned in the `vwan-security-microhack-spoke-rg` Resource Group, but still needs to be attched to the subnet.
+
+Navigate to `nva-vnet`, click subnets and select `nva-untrust-subnet`. Under Route table select `nva-untrust-udr`.
+
+![image](images/attach-nva-untrust-udr.png)
+
+Return traffic from the OPNsense firewall must be directed back to the CSR1000v's untrusted interface. Another UDR to achieve this is pre-provisioned in the `vwan-security-microhack-spoke-rg` Resource Group, but still needs to be attched to the OPNsense trusted subnet.
+
+Navigate to `nva-vnet`, click subnets and select `opnsense-trust-subnet`. Under Route table select `nva-untrust-udr`.
 
 # Close Out
 

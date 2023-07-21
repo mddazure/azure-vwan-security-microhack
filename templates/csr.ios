@@ -3,7 +3,7 @@ ip address dhcp
 interface GigabitEthernet2
 ip address dhcp
 !default route pointing to GigE2 which has public IP
-ip route 0.0.0.0 0.0.0.0 GigabitEthernet2 172.16.20.65
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet2 172.16.20.33
 !remove default route pointing to GigE1
 no ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 172.16.20.1
 ! static route to VWAN Hub subnet pointing to CSR subnet default gateway, to prevent recursive routing failure for VWAN Hub endpoint addresses learned via BGP from Hub
