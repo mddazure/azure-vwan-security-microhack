@@ -436,7 +436,9 @@ In the dropdown under Internet Traffic, select None, then click Save.
 
 Do the same for the US East Hub.
 
-## Task 2: Deploy OPNsense NVA
+## Task 2: OPNsense NVA
+
+### Deploy
 This task leverages Daniel Mauser's excellent [OPNsense NVA Firewall in Azure](https://github.com/dmauser/opnazure) lab.
 
 In Cloud Shell, accept the usage terms of FreeBSD Linux:
@@ -459,9 +461,26 @@ Review summary on the final screen, and click Create at the bottom:
 
 ![image](images/opnsense-review-create.png)
 
-When the deployment completes, browse to the NVA's public IP address ( OPNsense-PublicIP).
+### Configure
+When the deployment is complete, browse to the NVA's public IP address ( OPNsense-PublicIP).
 - Username: root
 - Password: opnsense (lowercase)
+
+In the left hand bar, click Firewall -> NAT -> Outbound.
+
+In the Manual rules window, click the **+** on the right hand side.
+
+![image](images/opnsense-nat-rule.png)
+
+In the next screen, accept all the defaults to create a rule that Source NATs all outbound traffic to WAN IP address of the firewall. Scroll down to Log and tick the box. Scroll down to the bottom and click Save.
+
+:point_right: Click the Apply changes button at the top right to let the rule take effect.
+
+In the left hand bar, now click Rules -> LAN and **+** on the right hand side in the rules window. Again accept all defaults, tick box at Log and click Save at the bottom.
+
+:point_right: Click the Apply changes button at the top right.
+
+The firewall is now configured to Allow and Source NAT all outbound traffic. Feel dree to experiment with otjher rules.
 
 ## Task 3: Advertise default route from CSR1000v NVA
 
@@ -500,7 +519,8 @@ Note that the default route points directly to Internet.
 
 :point_right: The default route is not advertised between Hubs. Cross-hub internet access is not possible and aach Hub must implement its own, local internet break out facility.
 
-### User Defined Route
+### User Defined Routes
+#### NVA VNET
 As we want outbound traffic to be secured by the OPNsense firewall, we need a UDR on the nva-untrusted subnet to push the traffic to the firewall's trusted or inside interface. However, the SDWAN IPSec tunnel traffic should not be firewalled, so the UDR must contain an explicit route to send traffic for `vnet-gw-onprem3` to the internet directly.
 
 ![image](images/nva-udr.png)
@@ -515,5 +535,26 @@ Return traffic from the OPNsense firewall must be directed back to the CSR1000v'
 
 Navigate to `nva-vnet`, click subnets and select `opnsense-trust-subnet`. Under Route table select `nva-untrust-udr`.
 
-# Close Out
+#### Spoke VNETs
+With the Internet Routing Policy now disabled, the Hub no longer programs the default route in the Spoke VNETs - even though it learns a default route via BGP from the CSR1000v NVA in nva-vnet.
 
+To force internet traffic from Spokes to the Hub, we need a UDR in each spoke containing a default route pointing to the Azure Firewall load balancer address in the Hub. The route table on the firewall subnet has the default route advertised by the NVA, and internet traffic is sent through the NVA, **not** Azure Firewall.
+
+Navigate to `spoke-1-vnet`, click subnets and select `vm-subnet`. Under Route table select `spoke-1-udr`.
+
+### Verify
+Log in to `spoke-1-vm` at 172.16.1.4 via Bastion.
+
+Open a command prompt and retrieve the outbound IP address from ipconfig.io.
+
+`curl ipconfig.io`
+
+❓To which element does the IP address returned belong?
+
+# Close Out
+Steps to safely and completely delete the lab:
+- Dissociate the firewall policies from the hub firewalls
+- Delete the child policies
+- Delete the parent policy
+- Delete the Hub resource group `microhack-we-secured-hub`
+- Once the Hub resource group is completely removed, delete the Spoke resource group `vwan-security-microhack-spoke-rg`
