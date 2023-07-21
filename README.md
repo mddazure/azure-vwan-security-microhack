@@ -14,9 +14,9 @@
 
 [Scenario 2: Secure Internet Traffic](#scenario-2-secure-internet-traffic)
 
-[Scenario 3: SDWAN thriugh NVA in Spoke](#scenario-3-sdwan-through-nva-in-spoke)
+[Scenario 3: SDWAN through NVA in Spoke](#scenario-3-sdwan-through-nva-in-spoke)
 
-[Scenario 4: Inther through Firewall in Spoke](#scenario-4-internet-through-firewall-in-spoke)
+[Scenario 4: Internet through Firewall in Spoke](#scenario-4-internet-through-firewall-in-spoke)
 
 [Close Out](#close-out)
 
