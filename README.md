@@ -229,7 +229,7 @@ Connect to spoke-1-vm at 172.16.1.4 via Bastion, open a command prompt and obtai
 
 ❓ Which IP address does it connect from? What resource does this address belong to?
 
-Check the routing on spoke-1-vm in Could Shell:
+Check the routing on spoke-1-vm in Cloud Shell:
 
 `az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table`
 
@@ -261,7 +261,7 @@ From spoke-vm-1, again do `curl ipconfig.io`.
 
 ❓ Which IP address does it connect from? What resource does this address belong to?
 
-Check the routing on spoke-1-vm in Could Shell:
+Check the routing on spoke-1-vm in Cloud Shell:
 
 `az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table`
 
