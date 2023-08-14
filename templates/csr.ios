@@ -44,6 +44,9 @@ crypto ipsec profile azure-ipsec-onprem3
  set transform-set azure-ipsec-proposal-set 
  set ikev2-profile azure-profile-connectionOnprem3HubCSR
 !
+interface Loopback0
+ ip address 1.1.1.1 255.255.255.255
+!
 interface Tunnel101
  ip address 10.0.100.4 255.255.255.254
  ip tcp adjust-mss 1350
@@ -71,5 +74,7 @@ neighbor 192.168.0.69 remote-as 65515
 neighbor 192.168.0.69 ebgp-multihop 255
 neighbor 10.100.10.164 remote-as 64300
 neighbor 10.100.10.164 ebgp-multihop 255
+neighbor 10.100.10.164 update-source Loopback0
 neighbor 10.100.10.165 remote-as 64300
 neighbor 10.100.10.165 ebgp-multihop 255
+neighbor 10.100.10.165 update-source Loopback0
