@@ -423,7 +423,13 @@ Connect to onprem-3-vm at 10.100.10.4 via Bastion, open a command prompt and obt
 What is the next hop for 0.0.0.0/0?
 
 # Scenario 4: Internet through Firewall in Spoke
-You will now deploy add OPNsense firewall into the nva-vnet. Outbound internet traffic from Spokes, Branches and SDWAN will be directed through the CSR1000v router and through the OPNsense firewall, in stead of through the Hub firewalls.
+You will now deploy an OPNsense firewall into the nva-vnet. Outbound internet traffic from Spokes, Branches and SDWAN will be directed through the CSR1000v router and through the OPNsense firewall, in stead of through the Hub firewalls.
+
+The CSR1000v router will attract outbound traffic by advertising a default route into the WE Hub via BGP. It will route that traffic to the OPNSense firewall. The firewall will send it to the internet.
+
+:point_right: Another solution would be to advertise the default route directly from the firewall to the Hub (OPNsense supports BGP through a plugin). However, running dynamic routing on a firewall is not considered good practice. 
+
+:point_right: The default route is not exchanged between Hubs. Spokes and Branches connected to the US East Hub will not be able to reach the internet via the NVA in nva-vnet.
 
 ![image](images/internet-via-opnsense.png)
 
@@ -489,9 +495,9 @@ The CSR will now advertise the default route both into the West Europe Hub and t
 
 Log on to nva-csr-vm via Serial console.
 
-Type `en` to enter enablement mode. The route already has a default route pointing to GigebitEthernet2, verify this by inspecting the routing table with `sh ip route`. 
+Type `en` to enter enablement mode. The router already has a default route pointing to GigebitEthernet2, verify this by inspecting the routing table with `sh ip route`. 
 
-However, this route is not advertised over BGP, verify this by inspecting advertised routes to one of the BGP peers with `sh ip bgp neighbors 192.168.0.68 adverised-routes`.
+However, this route is not advertised over BGP, verify this by inspecting advertised routes to one of the BGP peers with `sh ip bgp neighbors 192.168.0.68 advertised-routes`.
 
 To start advertising the default route, a network statement needs to be added to the bgp configuration.
 
@@ -507,7 +513,7 @@ Verify that the default route is learned by the West Europe Hub.
 
 Navigate to the West Europe Hub and click Effective Routes. Under Choose resource type select Azure Firewall and under Resource microhack-we-hub-firewall.
 
-The default route should be lsited with Next Hop Type HubBgpConnection and Next Hop the BGP connection to the CSR.
+The default route should be listed with Next Hop Type HubBgpConnection and Next Hop the BGP connection to the CSR.
 
 ![image](images/west-europe-default-route.png)
 
@@ -521,7 +527,7 @@ Note that the default route points directly to Internet.
 
 ### User Defined Routes
 #### NVA VNET
-As we want outbound traffic to be secured by the OPNsense firewall, we need a UDR on the nva-untrusted subnet to push the traffic to the firewall's trusted or inside interface. However, the SDWAN IPSec tunnel traffic should not be firewalled, so the UDR must contain an explicit route to send traffic for `vnet-gw-onprem3` to the internet directly.
+As we want outbound traffic to be secured by the OPNsense firewall, we need a UDR on the `nva-untrust-subnet`, to which the CSR1000v outside interface is attached, to push the traffic to the firewall's trusted or inside interface. However, the SDWAN IPSec tunnel traffic should not be firewalled, so the UDR must contain an explicit route to send traffic for `vnet-gw-onprem3` to the internet directly.
 
 ![image](images/nva-udr.png)
 
@@ -537,6 +543,8 @@ Navigate to `nva-vnet`, click subnets and select `opnsense-trust-subnet`. Under 
 
 #### Spoke VNETs
 With the Internet Routing Policy now disabled, the Hub no longer programs the default route in the Spoke VNETs - even though it learns a default route via BGP from the CSR1000v NVA in nva-vnet.
+
+:point_right: Routing Intent is still enabled for private traffic, as we want spoke-to-spoke traffic secured dy Azure Firewall in both Hubs. The Default route table is therefore controlled by RI, and will not allow adding a default route manually.
 
 To force internet traffic from Spokes to the Hub, we need a UDR in each spoke containing a default route pointing to the Azure Firewall load balancer address in the Hub. The route table on the firewall subnet has the default route advertised by the NVA, and internet traffic is sent through the NVA, **not** Azure Firewall.
 

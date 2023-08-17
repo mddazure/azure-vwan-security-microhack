@@ -370,7 +370,7 @@ resource "azurerm_route_table" "spoke-1-udr" {
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
   disable_bgp_route_propagation = true
   route {
-    name = "degault-via-hub"
+    name = "default-via-hub"
     address_prefix = "0.0.0.0/0"
     next_hop_type = "VirtualAppliance"
     next_hop_in_ip_address = "192.168.0.132"
