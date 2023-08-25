@@ -301,6 +301,7 @@ resource "azurerm_subnet_network_security_group_association" "nva-nsg-ass" {
 resource "azurerm_route_table" "nva-untrust-udr" {
   name = "nva-untrust-udr"
   location            = var.location-spoke-services
+  disable_bgp_route_propagation = true
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
   route {
     name = "vnet-gw-onprem3-pubip-1"
@@ -364,7 +365,7 @@ resource "azurerm_network_interface" "spoke-1-nic" {
     microhack    = "vwan-security"
   }
 }
-resource "azurerm_route_table" "spoke-1-udr" {
+resource "azurerm_route_table" "spoke-we-udr" {
   name = "spoke-we-udr"
   location            = var.location-spoke-1
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name

@@ -539,7 +539,7 @@ Navigate to `nva-vnet`, click subnets and select `nva-untrust-subnet`. Under Rou
 
 Return traffic from the OPNsense firewall must be directed back to the CSR1000v's untrusted interface. Another UDR to achieve this is pre-provisioned in the `vwan-security-microhack-spoke-rg` Resource Group, but still needs to be attched to the OPNsense trusted subnet.
 
-Navigate to `nva-vnet`, click subnets and select `opnsense-trust-subnet`. Under Route table select `nva-untrust-udr`.
+Navigate to `nva-vnet`, click subnets and select `opnsense-trust-subnet`. Under Route table select `opnsense-trust-udr`.
 
 #### Spoke VNETs
 With the Internet Routing Policy now disabled, the Hub no longer programs the default route in the Spoke VNETs - even though it learns a default route via BGP from the CSR1000v NVA in nva-vnet.
