@@ -47,3 +47,5 @@ resource "azurerm_public_ip" "vnet-gw-onprem2-pubip-1" {
       subnet_id                     = azurerm_subnet.onprem2-gateway-subnet.id
     }
   }
+
+

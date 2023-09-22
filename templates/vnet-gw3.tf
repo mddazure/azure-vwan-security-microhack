@@ -54,7 +54,7 @@ resource "azurerm_public_ip" "vnet-gw-onprem3-pubip-1" {
     gateway_address = azurerm_public_ip.nva-csr-vm-pub-ip.ip_address
     bgp_settings {
       asn = 64000
-      bgp_peering_address = azurerm_network_interface.nva-csr-vm-nic-2.private_ip_address
+      bgp_peering_address = "1.1.1.1"
     }    
   }
   resource "azurerm_virtual_network_gateway_connection" "to-csr" {
