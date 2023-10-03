@@ -501,6 +501,22 @@ resource "azurerm_windows_virtual_machine" "spoke-1-vm" {
     microhack    = "vwan-security"
   }
 }
+
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "spoke-1-vm-shut" {
+  virtual_machine_id = azurerm_windows_virtual_machine.spoke-1-vm.id
+  location           = azurerm_resource_group.spoke-1-vm.location
+  enabled            = true
+
+  daily_recurrence_time = "1900"
+  timezone              = "W. Europe Standard Time"
+
+
+  notification_settings {
+    enabled         = false
+   
+  }
+ }
+
 #######################################################################
 ## Create Virtual Machine spoke-2
 #######################################################################
