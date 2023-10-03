@@ -600,7 +600,7 @@ resource "azurerm_windows_virtual_machine" "spoke-3-vm" {
   }
 }
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "spoke-3-vm-shut" {
-  virtual_machine_id = azurerm_windows_virtual_machine.spoke3-vm.id
+  virtual_machine_id = azurerm_windows_virtual_machine.spoke-3-vm.id
   location           = var.location-spoke-3
   enabled            = true
 
@@ -850,7 +850,7 @@ resource "azurerm_linux_virtual_machine" "nva-csr-vm" {
   }
 }
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "nva-csr-vm-shut" {
-  virtual_machine_id = azurerm_windows_virtual_machine.nva-csr-vm.id
+  virtual_machine_id = azurerm_linux_virtual_machine.nva-csr-vm.id
   location           = var.location-spoke-services
   enabled            = true
 
