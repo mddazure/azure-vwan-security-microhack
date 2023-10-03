@@ -2,7 +2,7 @@
 
 $azfwwe = Get-AzFirewall -Name "microhack-we-hub-firewall" -ResourceGroupName "vwan-security-microhack-hub-rg"
 $azfwwe.Deallocate()
-Set-AzFirewall -AzureFirewall $azfw
+Set-AzFirewall -AzureFirewall $azfwwe
 
 # Stop useast firewall
 
