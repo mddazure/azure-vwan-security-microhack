@@ -6,6 +6,6 @@ Set-AzFirewall -AzureFirewall $azfwwe
 
 # Stop useast firewall
 
-$azfwuseast = Get-AzFirewall -Name "microhack-we-hub-firewall" -ResourceGroupName "vwan-security-microhack-hub-rg"
+$azfwuseast = Get-AzFirewall -Name "microhack-useast-hub-firewall" -ResourceGroupName "vwan-security-microhack-hub-rg"
 $azfwuseast.Deallocate()
-Set-AzFirewall -AzureFirewall $azfwuseast
+Set-AzFirewall -AzureFirewall $azfwuseast 
