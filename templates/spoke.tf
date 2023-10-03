@@ -551,6 +551,21 @@ resource "azurerm_windows_virtual_machine" "spoke-2-vm" {
     microhack    = "vwan-security"
   }
 }
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "spoke-2-vm-shut" {
+  virtual_machine_id = azurerm_windows_virtual_machine.spoke-2-vm.id
+  location           = var.location-spoke-2
+  enabled            = true
+
+  daily_recurrence_time = "1900"
+  timezone              = "W. Europe Standard Time"
+
+
+  notification_settings {
+    enabled         = false
+   
+  }
+ }
+
 #######################################################################
 ## Create Virtual Machine spoke-3
 #######################################################################
@@ -584,6 +599,20 @@ resource "azurerm_windows_virtual_machine" "spoke-3-vm" {
     microhack    = "vwan-security"
   }
 }
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "spoke-3-vm-shut" {
+  virtual_machine_id = azurerm_windows_virtual_machine.spoke3-vm.id
+  location           = var.location-spoke-3
+  enabled            = true
+
+  daily_recurrence_time = "1900"
+  timezone              = "W. Europe Standard Time"
+
+
+  notification_settings {
+    enabled         = false
+   
+  }
+ }
 #######################################################################
 ## Create Virtual Machine spoke-4
 #######################################################################
@@ -617,6 +646,20 @@ resource "azurerm_windows_virtual_machine" "spoke-4-vm" {
     microhack    = "vwan-security"
   }
 }
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "spoke-4-vm-shut" {
+  virtual_machine_id = azurerm_windows_virtual_machine.spoke-4-vm.id
+  location           = var.location-spoke-4
+  enabled            = true
+
+  daily_recurrence_time = "1900"
+  timezone              = "W. Europe Standard Time"
+
+
+  notification_settings {
+    enabled         = false
+   
+  }
+ }
 
 /*
 #######################################################################
@@ -806,5 +849,18 @@ resource "azurerm_linux_virtual_machine" "nva-csr-vm" {
     microhack    = "vwan-security"
   }
 }
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "nva-csr-vm-shut" {
+  virtual_machine_id = azurerm_windows_virtual_machine.nva-csr-vm.id
+  location           = var.location-spoke-services
+  enabled            = true
 
+  daily_recurrence_time = "1900"
+  timezone              = "W. Europe Standard Time"
+
+
+  notification_settings {
+    enabled         = false
+   
+  }
+ }
 
