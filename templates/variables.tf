@@ -88,5 +88,5 @@ variable "vmsize" {
 }
 variable "shutdown-time"{
   description = "Time to shutdown the VMs"
-  default     = "19:00"
+  default     = "1900"
 }
