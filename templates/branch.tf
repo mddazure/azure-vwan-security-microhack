@@ -210,6 +210,20 @@ resource "azurerm_windows_virtual_machine" "onprem-vm" {
     microhack    = "vwan-security"
   }
 }
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "onprem-vm-shut" {
+  virtual_machine_id = azurerm_windows_virtual_machine.onprem-vm.id
+  location           = var.location-onprem
+  enabled            = true
+
+  daily_recurrence_time = var.shutdown-time
+  timezone              = "W. Europe Standard Time"
+
+
+  notification_settings {
+    enabled         = false
+   
+  }
+ }
 #######################################################################
 ## Create Virtual Machine onprem2
 #######################################################################
@@ -243,6 +257,20 @@ resource "azurerm_windows_virtual_machine" "onprem2-vm" {
     microhack    = "vwan-security"
   }
 }
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "onprem2-vm-shut" {
+  virtual_machine_id = azurerm_windows_virtual_machine.onprem2-vm.id
+  location           = var.location-onprem2
+  enabled            = true
+
+  daily_recurrence_time = var.shutdown-time
+  timezone              = "W. Europe Standard Time"
+
+
+  notification_settings {
+    enabled         = false
+   
+  }
+ }
 #######################################################################
 ## Create Virtual Machine onprem3
 #######################################################################
@@ -276,3 +304,17 @@ resource "azurerm_windows_virtual_machine" "onprem3-vm" {
     microhack    = "vwan-security"
   }
 }
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "onprem3-vm-shut" {
+  virtual_machine_id = azurerm_windows_virtual_machine.onprem3-vm.id
+  location           = var.location-onprem3
+  enabled            = true
+
+  daily_recurrence_time = var.shutdown-time
+  timezone              = "W. Europe Standard Time"
+
+
+  notification_settings {
+    enabled         = false
+   
+  }
+ }

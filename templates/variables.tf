@@ -86,3 +86,7 @@ variable "vmsize" {
   description = "Size of the VMs"
   default     = "Standard_D2s_v3"
 }
+variable "shutdown-time"{
+  description = "Time to shutdown the VMs"
+  default     = "19:00"
+}

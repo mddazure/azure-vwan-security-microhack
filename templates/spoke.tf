@@ -507,7 +507,7 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "spoke-1-vm-shut" {
   location           = var.location-spoke-1
   enabled            = true
 
-  daily_recurrence_time = "1900"
+  daily_recurrence_time = var.shutdown-time
   timezone              = "W. Europe Standard Time"
 
 
@@ -556,7 +556,7 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "spoke-2-vm-shut" {
   location           = var.location-spoke-2
   enabled            = true
 
-  daily_recurrence_time = "1900"
+  daily_recurrence_time = var.shutdown-time
   timezone              = "W. Europe Standard Time"
 
 
@@ -604,7 +604,7 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "spoke-3-vm-shut" {
   location           = var.location-spoke-3
   enabled            = true
 
-  daily_recurrence_time = "1900"
+  daily_recurrence_time = var.shutdown-time
   timezone              = "W. Europe Standard Time"
 
 
@@ -651,7 +651,7 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "spoke-4-vm-shut" {
   location           = var.location-spoke-4
   enabled            = true
 
-  daily_recurrence_time = "1900"
+  daily_recurrence_time = var.shutdown-time
   timezone              = "W. Europe Standard Time"
 
 
@@ -854,7 +854,7 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "nva-csr-vm-shut" {
   location           = var.location-spoke-services
   enabled            = true
 
-  daily_recurrence_time = "1900"
+  daily_recurrence_time = var.shutdown-time
   timezone              = "W. Europe Standard Time"
 
 
