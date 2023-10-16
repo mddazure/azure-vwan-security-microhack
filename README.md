@@ -53,8 +53,6 @@ The lab looks like this (with green components pre-deployed through Terraform, s
 
 ![image](images/microhack-vwan-security.png)
 
-:exclamation: The resources deployed in this lab incur a combined charge of around $170 per day, so do remember to delete the environment when done!
-
 # Prerequisites
 To make the most of your time on this MircoHack, the lab in the diagram above is deployed and configured for you through Terraform. You will focus on enabling and inspecting network security through the Azure portal and Cloud Shell.
 ## Task 1: Deploy
@@ -97,6 +95,18 @@ Steps:
   `terraform apply`
 
 Deployment takes approximately 30 minutes. 
+
+:exclamation: The resources deployed in this lab incur a combined charge of around $170 per day. To help save costs, Auto-shutdown is configured to de-allocate all VMs at 19.00 CET. 
+
+The Templates directory contains Powershell scripts stop and start the Azure Firewall instances in both Hubs.
+
+Stop both firewalls from Cloud Shell:
+
+`pwsh stop-fw.ps1`
+
+Start both firewalls:
+
+`pwsh start-fw.ps1`
 
 ## Task 2: Explore and verify
 
