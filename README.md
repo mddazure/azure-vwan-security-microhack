@@ -98,7 +98,7 @@ Deployment takes approximately 30 minutes.
 
 :exclamation: The resources deployed in this lab incur a combined charge of around $170 per day. To help save costs, Auto-shutdown is configured to de-allocate all VMs at 19.00 CET. 
 
-The Templates directory contains Powershell scripts stop and start the Azure Firewall instances in both Hubs.
+The Templates directory contains Powershell scripts to manually stop and start the Azure Firewall instances in both Hubs.
 
 Stop both firewalls from Cloud Shell:
 
