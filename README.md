@@ -60,39 +60,39 @@ Steps:
 - Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash
 - Set environment variables required by Terraform. These should already be present, but may have been removed after an upgrade to Cloud Shell; Terraform will fail if they are not present:
   
-  `export ARM_USE_MSI=true`
+  ```export ARM_USE_MSI=true```
   
-  `export ARM_SUBSCRIPTION_ID=<your sub id>`
+  ```export ARM_SUBSCRIPTION_ID=<your sub id>```
 
-  `export ARM_TENANT_ID=<aad tenant id>`
+  ```export ARM_TENANT_ID=<aad tenant id>```
 
 - Ensure Azure CLI and extensions are up to date:
   
-  `az upgrade --yes`
+  ```az upgrade --yes```
   
 - If necessary select your target subscription:
   
-  `az account set --subscription <Name or ID of subscription>`
+  ```az account set --subscription <Name or ID of subscription>```
   
 - Clone the  GitHub repository:
   
-  `git clone https://github.com/mddazure/azure-vwan-security-microhack`
+  ```git clone https://github.com/mddazure/azure-vwan-security-microhack```
   
   - Change directory:
   
-  `cd ./azure-vwan-security-microhack/templates`
+  ```cd ./azure-vwan-security-microhack/templates```
 
 - Accept the terms for the CSR1000v Marketplace offer:
   
-  `az vm image terms accept --urn cisco:cisco-csr-1000v:16_12_5-byol:latest`
+  ```az vm image terms accept --urn cisco:cisco-csr-1000v:16_12_5-byol:latest```
 
 - Initialize terraform and download the azurerm resource provider:
 
-  `terraform init`
+  ```terraform init```
 
 - Now start the deployment (when prompted, confirm with **yes** to start the deployment):
  
-  `terraform apply`
+  ```terraform apply```
 
 Deployment takes approximately 30 minutes. 
 
@@ -102,11 +102,11 @@ The Templates directory contains Powershell scripts to manually stop and start t
 
 Stop both firewalls from Cloud Shell:
 
-`pwsh stop-fw.ps1`
+```pwsh stop-fw.ps1```
 
 Start both firewalls:
 
-`pwsh start-fw.ps1`
+```pwsh start-fw.ps1```
 
 ## Task 2: Explore and verify
 
@@ -136,7 +136,7 @@ You may log on to each VM through the Bastion instance in the Services VNET. Nav
 - onprem2-vm: 10.0.3.4
 - onprem3-vm: 10.0.5.4
 
-Open a command prompt and type `curl localhost`. The response will be the VM name. 
+Open a command prompt and type ```curl localhost```. The response will be the VM name. 
 
 :exclamation: Branch locations onprem, onprem-2 and on-prem-3 are not connected yet, so their VMs will not be reachable from the Bastion instance in the Services VNET.
 
@@ -151,17 +151,17 @@ Both Hubs have Azure Firewall deployed, but securing traffic through the firewal
 
 Connect to spoke-1-vm, open a command prompt and attempt to connect to the web server on spoke-2-vm at 172.16.2.4, spoke-3-vm at 172.16.3.4 and spoke-4-vm at 172.16.4.4:
 
-`curl 172.16.2.4`
+```curl 172.16.2.4```
 
-`curl 172.16.3.4`
+```curl 172.16.3.4```
 
-`curl 172.16.4.4`
+```curl 172.16.4.4```
 
 ❓ Does it connect?
 
 Check the routing table on spoke-1-vm in Cloud Shell:
 
-`az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table`
+```az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table```
 
 Look up the address of the firewall installed in the West Europe hub `microhack-we-hub-firewall`
 
@@ -182,11 +182,11 @@ In the dropdown under Private Traffic, select Azure Firewall and under Next Hop 
 
 From spoke-1-vm, again attempt connecting to spoke-2-vm at 172.16.2.4, spoke-3-vm at 172.16.3.4 and spoke-4-vm at 172.16.4.4:
 
-`curl 172.16.2.4`
+```curl 172.16.2.4```
 
-`curl 172.16.3.4`
+```curl 172.16.3.4```
 
-`curl 172.16.4.4`
+```curl 172.16.4.4```
 
 ❓ Does it connect?
 
@@ -205,15 +205,15 @@ Inspect the route table, observe routes for directly connected and cross-hub spo
 ## Task 3: Secure Branch-to-Branch traffic
 Connect simulated Branch locations `onprem` and `onprem-2` to the West Europe Hub, by running these shell scripts from the `./azure-vwan-security-microhack/templates` directory in Cloud Shell:
 
-`./connect-branch.sh`
+```./connect-branch.sh```
 
-`./connect-branch2.sh`
+```./connect-branch2.sh```
 
 The scripts create VPN sites on the West Europe hub, and connect to the VNET Gateways in onprem-vnet and onprem2-vnet.
 
 Connect to onprem-vm via Bastion, open a command prompt and attempt to connect to the web server on onprem2-vm at 10.0.3.4:
 
-`curl 10.0.3.4`
+```curl 10.0.3.4```
 
 :question: Does it connect?
 
@@ -235,19 +235,19 @@ You will now secure traffic outbound to internet through the firewall in each Hu
 ## Task 1: Baseline
 Connect to spoke-1-vm at 172.16.1.4 via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
 
-`curl ipconfig.io`
+```curl ipconfig.io```
 
 ❓ Which IP address does it connect from? What resource does this address belong to?
 
 Check the routing on spoke-1-vm in Cloud Shell:
 
-`az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table`
+```az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table```
 
 ❓ Where does the default route point?
 
 Connect to onprem-vm at 10.0.1.4 via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
 
-`curl ipconfig.io`
+```curl ipconfig.io```
 
 ❓ Which IP address does it connect from? What resource does this address belong to?
 
@@ -267,31 +267,31 @@ In the dropdown under Internet Traffic, select Azure Firewall and under Next Hop
 
 ### Verify
 
-From spoke-vm-1, again do `curl ipconfig.io`.
+From spoke-vm-1, again do ```curl ipconfig.io```.
 
 ❓ Which IP address does it connect from? What resource does this address belong to?
 
 Check the routing on spoke-1-vm in Cloud Shell:
 
-`az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table`
+```az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-1-nic --output table```
 
 ❓ Where does the default route now point?
 
 Now connect to spoke-4-vm via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
 
-`curl ipconfig.io`
+```curl ipconfig.io```
 
 ❓ Which IP address does it connect from? What resource does this address belong to?
 
 Check the routing on spoke-4-vm in Cloud Shell:
 
-`az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-4-nic --output table`
+```az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n spoke-4-nic --output table```
 
 ❓ Where does the default route point?
 
 Connect to onprem-vm at 10.0.1.4 via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
 
-`curl ipconfig.io`
+```curl ipconfig.io```
 
 ❓ Which IP address does it connect from? Why is the outbound address for this Branch different from the outbound address of the Spokes?
 
@@ -334,7 +334,7 @@ Wait for the change to complete.
 
 On your laptop, open a command prompt and enter:
 
-`curl [Firewall public IP]`
+```curl [Firewall public IP]```
 
 The response should read "spoke-4-vm".
 
@@ -355,10 +355,11 @@ You will now connect an SD-WAN connection to the Cisco CSR1000v router in nva-vn
 ## Task 1: Configure CSR1000v NVA
 The CSR1000v NVA is deployed in nva-vnet as nva-csr-vm, but it still needs to be configured. The Cisco IOS configuration is contained in [csr.ios](/templates/csr.ios). The public IP addresses of vnet-gw-onprem3 need to be inserted into the ios configuration, and then the configuration must be copied into the CSR1000v through its command line interface.
 
-- Obtain the IP addresses of `vnet-gw-onprem3-pubip-1` and `vnet-gw-onprem3-pubip-2`, either from the portal, or from Cloud Shell through:
+- Obtain the IP addresses of ```vnet-gw-onprem3-pubip-1``` and ```vnet-gw-onprem3-pubip-2```, either from the portal, or from Cloud Shell through:
 
-  `az network public-ip show -g vwan-security-microhack-spoke-rg -n vnet-gw-onprem3-pubip-1 --query ipAddress`
-  `az network public-ip show -g vwan-security-microhack-spoke-rg -n vnet-gw-onprem3-pubip-2 --query ipAddress`
+ ```az network public-ip show -g vwan-security-microhack-spoke-rg -n vnet-gw-onprem3-pubip-1 --query ipAddress```
+
+ ```az network public-ip show -g vwan-security-microhack-spoke-rg -n vnet-gw-onprem3-pubip-2 --query ipAddress```
 
 - Open [csr.ios](/templates/csr.ios) in a text editor and replace the strings "vnet-gw-onprem3-pubip1" and "vnet-gw-onprem3-pubip2" with these IP addresses.
 
@@ -408,13 +409,13 @@ Confirm routes are learned via BGP:
 Log on to onprem-3-vm at 10.100.10.4 via Bastion.
 
 Attempt to connect Spoke and Branch VMs:
-`curl 172.16.1.4`
+```curl 172.16.1.4```
 
-`curl 172.16.4.4`
+```curl 172.16.4.4```
 
-`curl 10.0.1.4`
+```curl 10.0.1.4```
 
-`curl 10.0.3.4`
+```curl 10.0.3.4```
 
 ❓ Why do these connections fail?
 
@@ -424,12 +425,13 @@ Modify Network rules in child policies microhack-fw-we-child-policy and microhac
 
 Connect to onprem-3-vm at 10.100.10.4 via Bastion, open a command prompt and obtain the outbound IP address from ipconfig.io:
 
-`curl ipconfig.io`
+```curl ipconfig.io```
 
 ❓ Which IP address does it connect from? Why is the outbound address of the SDWAN site different from the outbound address of the Spokes?
 
 :point_right: Inspect the Effective routes of onprem-3-vm in the portal or in Cloud Shell with
-`az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n onprem3-nic --output table`
+```az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n onprem3-nic --output table```
+
 What is the next hop for 0.0.0.0/0?
 
 # Scenario 4: Internet through Firewall in Spoke
@@ -459,7 +461,7 @@ This task leverages Daniel Mauser's excellent [OPNsense NVA Firewall in Azure](h
 
 In Cloud Shell, accept the usage terms of FreeBSD Linux:
  
-`az vm image terms accept --urn thefreebsdfoundation:freebsd-13_1:13_1-release:13.1.0 -o none`
+```az vm image terms accept --urn thefreebsdfoundation:freebsd-13_1:13_1-release:13.1.0 -o none```
 
 Then click the button initiate the template:
 
@@ -507,7 +509,9 @@ Log on to nva-csr-vm via Serial console.
 
 Type `en` to enter enablement mode. The router already has a default route pointing to GigebitEthernet2, verify this by inspecting the routing table with `sh ip route`. 
 
-However, this route is not advertised over BGP, verify this by inspecting advertised routes to one of the BGP peers with `sh ip bgp neighbors 192.168.0.68 advertised-routes`.
+However, this route is not advertised over BGP, verify this by inspecting advertised routes to one of the BGP peers with 
+
+`sh ip bgp neighbors 192.168.0.68 advertised-routes`.
 
 To start advertising the default route, a network statement needs to be added to the bgp configuration.
 
@@ -565,7 +569,7 @@ Log in to `spoke-1-vm` at 172.16.1.4 via Bastion.
 
 Open a command prompt and retrieve the outbound IP address from ipconfig.io.
 
-`curl ipconfig.io`
+```curl ipconfig.io```
 
 ❓To which element does the IP address returned belong?
 
