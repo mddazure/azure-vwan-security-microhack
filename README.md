@@ -373,7 +373,8 @@ The CSR1000v NVA is deployed in nva-vnet as nva-csr-vm, but it still needs to be
 
 - Type exit multiple times, until the prompt shows nva-vm-csr#.
 
-  :point_right: Messages warning that BGP peers 192.168.0.68 and 192.168.0.69 are down will now be displayed in the console, because BGP is not yet configured on the West Europe VWAN Hub. This is the next Task. To suppress these warnings, type `no logging console`.
+  :point_right: Messages warning that BGP peers 192.168.0.68 and 192.168.0.69 are down will now be displayed in the console, because BGP is not yet configured on the West Europe VWAN Hub. This is the next Task. To suppress these warnings, enter configuration mode bytyping `conf t` and then `no logging console` to stop displaying log messages.
+  Type exit, the prompt should now show nva-vm-csr# again.
 
 - Save the configuration with `copy run start`, confirm defaults.
 
