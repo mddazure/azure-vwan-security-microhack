@@ -60,7 +60,9 @@ Steps:
 - Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash
 - Set environment variables required by Terraform. These should already be present, but may have been removed after an upgrade to Cloud Shell; Terraform will fail if they are not present:
   
-  ```export ARM_USE_MSI=true```
+  ```
+  export ARM_USE_MSI=true
+  ```
   
   ```export ARM_SUBSCRIPTION_ID=<your sub id>```
 
