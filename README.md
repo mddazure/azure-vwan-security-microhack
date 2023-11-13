@@ -55,7 +55,7 @@ The lab looks like this (with green components pre-deployed through Terraform, s
 
 # Prerequisites
 To make the most of your time on this MircoHack, the lab in the diagram above is deployed and configured for you through Terraform. You will focus on enabling and inspecting network security through the Azure portal and Cloud Shell.
-## Task 1: Deploy
+## Task 1: Deploy Terraform
 Steps:
 - Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash
 - Set environment variables required by Terraform. These should already be present, but may have been removed after an upgrade to Cloud Shell; Terraform will fail if they are not present:
@@ -110,23 +110,19 @@ Steps:
 
 Deployment takes approximately 30 minutes. 
 
-:exclamation: The resources deployed in this lab incur a combined charge of around $170 per day. To help save costs, Auto-shutdown is configured to de-allocate all VMs at 19.00 CET. 
-
-The Templates directory contains Powershell scripts to manually stop and start the Azure Firewall instances in both Hubs.
-
-Stop both firewalls from Cloud Shell:
+## Task 2: Connect Branches
+After the Terraform deployment is complete, connect simulated Branch locations `onprem` and `onprem-2` to the West Europe Hub. Run these shell scripts from the `./azure-vwan-security-microhack/templates` directory in Cloud Shell:
 
 ```
-pwsh stop-fw.ps1
+./connect-branch.sh
+```
+```
+./connect-branch2.sh
 ```
 
-Start both firewalls:
+The scripts create VPN sites on the West Europe hub, and connect to the VNET Gateways in onprem-vnet and onprem2-vnet.
 
-```
-pwsh start-fw.ps1
-```
-
-## Task 2: Explore and verify
+## Task 3: Explore and verify
 
 After the Terraform deployment concludes successfully, the following has been deployed into your subscription:
 - A resource group named **vwan-security-microhack-spoke-rg** containing:
@@ -156,9 +152,18 @@ You may log on to each VM through the Bastion instance in the Services VNET. Nav
 
 Open a command prompt and type `curl localhost`. The response will be the VM name. 
 
-:exclamation: Branch locations onprem, onprem-2 and on-prem-3 are not connected yet, so their VMs will not be reachable from the Bastion instance in the Services VNET.
-
 :exclamation: Connect to nva-csr-vm (the CSR1000v Cisco router) through Serial console from the VM blade in stead of through Bastion. This access method is independent from network connectivity to the VM and avoids the risk of being locked out during configuration changes.
+
+:exclamation: The resources deployed in this lab incur a combined charge of around $170 per day. To help save costs, Auto-shutdown is configured to de-allocate all VMs at 19.00 CET. The Templates directory also contains Powershell scripts to manually suspend and restart the Azure Firewall instances in both Hubs, to help save costs further.
+
+Stop both firewalls from Cloud Shell:
+```
+pwsh stop-fw.ps1
+```
+Start both firewalls:
+```
+pwsh start-fw.ps1
+```
 
 # Scenario 1: Secure Private Traffic
 In this scenario, you will secure Spoke-to-Spoke and Branch-to-Spoke traffic accross Secured Hubs in different regions. 
@@ -635,7 +640,9 @@ Log in to `spoke-1-vm` at 172.16.1.4 via Bastion.
 
 Open a command prompt and retrieve the outbound IP address from ipconfig.io.
 
-```curl ipconfig.io```
+```
+curl ipconfig.io
+```
 
 ❓To which element does the IP address returned belong?
 
