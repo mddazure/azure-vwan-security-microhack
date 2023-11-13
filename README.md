@@ -112,7 +112,9 @@ Deployment takes approximately 30 minutes.
 
 ## Task 2: Connect Branches
 
-After the Terraform deployment is complete, connect simulated Branch locations `onprem` and `onprem-2` to the West Europe Hub. Run these shell scripts from the `./azure-vwan-security-microhack/templates` directory in Cloud Shell:
+After the Terraform deployment is complete, connect simulated Branch locations `onprem` and `onprem-2` to the West Europe Hub. 
+
+Run these shell scripts from the `./azure-vwan-security-microhack/templates` directory in Cloud Shell:
 
 ```
 ./connect-branch.sh
@@ -235,17 +237,7 @@ Now navigate back to the West Europe Hub and click Effective Routes. Under Choos
 Inspect the route table, observe routes for directly connected and cross-hub spoke routes.
 
 ## Task 3: Secure Branch-to-Branch traffic
-Connect simulated Branch locations `onprem` and `onprem-2` to the West Europe Hub, by running these shell scripts from the `./azure-vwan-security-microhack/templates` directory in Cloud Shell:
-
-```
-./connect-branch.sh
-```
-
-```
-./connect-branch2.sh
-```
-
-The scripts create VPN sites on the West Europe hub, and connect to the VNET Gateways in onprem-vnet and onprem2-vnet.
+Simulated Branch locations `onprem` and `onprem-2` are both connected to the VPN Gateway in the West Europe Hub.
 
 Connect to onprem-vm via Bastion, open a command prompt and attempt to connect to the web server on onprem2-vm at 10.0.3.4:
 
@@ -257,8 +249,6 @@ curl 10.0.3.4
 
 :question: Can you deduce where the connection from onprem-vm to onprem2-vm is blocked?
 Hint: Inspect the `microhack-fw-we-child-policy` firewall policy.
-
-Simulated Branch locations onprem-vnet and onprem2-vnet are both connected to the VPN Gateway on the West Europe hub.
 
 :point_right: Before the Routing Intent update, traffic between Branch S2S VPN connections on the same gateway would loop directly through the gateway and would not be inspected by the firewall in the Hub (red flow in the diagram below). 
 Post-RI, traffic from S2S and P2S VPN connections is now forwarded from the gateway to the firewall, allowing Branch-to-Branch connectivity to be controlled centrally by the Hub firewall (orange flow on the diagram).
