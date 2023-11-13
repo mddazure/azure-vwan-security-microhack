@@ -62,11 +62,9 @@ Steps:
   
   ```
   export ARM_USE_MSI=true
+  export ARM_SUBSCRIPTION_ID=<your sub id>
+  export ARM_TENANT_ID=<aad tenant id>
   ```
-  
-  ```export ARM_SUBSCRIPTION_ID=<your sub id>```
-
-  ```export ARM_TENANT_ID=<aad tenant id>```
 
 - Ensure Azure CLI and extensions are up to date:
   
