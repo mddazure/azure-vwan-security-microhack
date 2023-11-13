@@ -68,31 +68,45 @@ Steps:
 
 - Ensure Azure CLI and extensions are up to date:
   
-  ```az upgrade --yes```
+  ```
+  az upgrade --yes
+  ```
   
 - If necessary select your target subscription:
   
-  ```az account set --subscription <Name or ID of subscription>```
+  ```
+  az account set --subscription <Name or ID of subscription>
+  ```
   
 - Clone the  GitHub repository:
   
-  ```git clone https://github.com/mddazure/azure-vwan-security-microhack```
+  ```
+  git clone https://github.com/mddazure/azure-vwan-security-microhack
+  ```
   
   - Change directory:
   
-  ```cd ./azure-vwan-security-microhack/templates```
+  ```
+  cd ./azure-vwan-security-microhack/templates
+  ```
 
 - Accept the terms for the CSR1000v Marketplace offer:
   
-  ```az vm image terms accept --urn cisco:cisco-csr-1000v:16_12_5-byol:latest```
+  ```
+  az vm image terms accept --urn cisco:cisco-csr-1000v:16_12_5-byol:latest
+  ```
 
 - Initialize terraform and download the azurerm resource provider:
 
-  ```terraform init```
+  ```
+  terraform init
+  ```
 
 - Now start the deployment (when prompted, confirm with **yes** to start the deployment):
  
-  ```terraform apply```
+  ```
+  terraform apply
+  ```
 
 Deployment takes approximately 30 minutes. 
 
@@ -102,11 +116,15 @@ The Templates directory contains Powershell scripts to manually stop and start t
 
 Stop both firewalls from Cloud Shell:
 
-```pwsh stop-fw.ps1```
+```
+pwsh stop-fw.ps1
+```
 
 Start both firewalls:
 
-```pwsh start-fw.ps1```
+```
+pwsh start-fw.ps1
+```
 
 ## Task 2: Explore and verify
 
@@ -136,7 +154,7 @@ You may log on to each VM through the Bastion instance in the Services VNET. Nav
 - onprem2-vm: 10.0.3.4
 - onprem3-vm: 10.0.5.4
 
-Open a command prompt and type ```curl localhost```. The response will be the VM name. 
+Open a command prompt and type `curl localhost`. The response will be the VM name. 
 
 :exclamation: Branch locations onprem, onprem-2 and on-prem-3 are not connected yet, so their VMs will not be reachable from the Bastion instance in the Services VNET.
 
@@ -151,11 +169,11 @@ Both Hubs have Azure Firewall deployed, but securing traffic through the firewal
 
 Connect to spoke-1-vm, open a command prompt and attempt to connect to the web server on spoke-2-vm at 172.16.2.4, spoke-3-vm at 172.16.3.4 and spoke-4-vm at 172.16.4.4:
 
-```curl 172.16.2.4```
-
-```curl 172.16.3.4```
-
-```curl 172.16.4.4```
+```
+curl 172.16.2.4
+curl 172.16.3.4
+curl 172.16.4.4
+```
 
 ❓ Does it connect?
 
