@@ -111,6 +111,7 @@ Steps:
 Deployment takes approximately 30 minutes. 
 
 ## Task 2: Connect Branches
+
 After the Terraform deployment is complete, connect simulated Branch locations `onprem` and `onprem-2` to the West Europe Hub. Run these shell scripts from the `./azure-vwan-security-microhack/templates` directory in Cloud Shell:
 
 ```
