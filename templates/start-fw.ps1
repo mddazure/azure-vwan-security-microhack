@@ -11,3 +11,17 @@ $virtualhubuseast = get-azvirtualhub -ResourceGroupName "vwan-security-microhack
 $azfwuseast = Get-AzFirewall -Name "microhack-useast-hub-firewall" -ResourceGroupName "vwan-security-microhack-hub-rg"
 $azfwuseast.Allocate($virtualhubuseast.Id)
 $azfwuseast | Set-AzFirewall
+
+# Start sec firewall
+
+$virtualhubsec = get-azvirtualhub -ResourceGroupName "vwan-security-microhack-hub-rg" -name "microhack-sec-secured-hub"
+$azfwsec = Get-AzFirewall -Name "AzureFirewall_microhack-sec-secured-hub" -ResourceGroupName "vwan-security-microhack-hub-rg"
+$azfwsec.Allocate($virtualhubsec.Id)
+$azfwsec | Set-AzFirewall
+
+# Start gewc firewall
+
+$virtualhubgewc = get-azvirtualhub -ResourceGroupName "vwan-security-microhack-hub-rg" -name "microhack-gewc-secured-hub"
+$azfwgewc = Get-AzFirewall -Name "AzureFirewall_microhack-gewc-secured-hub" -ResourceGroupName "vwan-security-microhack-hub-rg"
+$azfwgewc.Allocate($virtualhubgewc.Id)
+$azfwgewc | Set-AzFirewall
