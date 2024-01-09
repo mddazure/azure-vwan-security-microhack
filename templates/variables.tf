@@ -1,8 +1,8 @@
 variable "location-vwan" {
   description = "Location to deploy vwan"
   type        = string
-  //default     = "swedencentral"
-default = "westeurope"
+  default     = "swedencentral"
+  //default = "westeurope"
 }
 variable "location-vwan-we-hub" {
   description = "Location to deploy we hub"
@@ -18,14 +18,14 @@ default = "eastus"
 variable "location-spoke-1" {
   description = "Location to deploy spoke-1"
   type        = string
-  //default     = "swedencentral"
-default = "westeurope"
+  default     = "swedencentral"
+  //default = "westeurope"
 }
 variable "location-spoke-2" {
   description = "Location to deploy spoke-2"
   type        = string
-  //default     = "swedencentral"
-default = "westeurope"
+  default     = "swedencentral"
+  //default = "westeurope"
 }
 variable "location-spoke-3" {
   description = "Location to deploy spoke-3"
@@ -41,8 +41,8 @@ variable "location-spoke-4" {
 variable "location-hub-1" {
   description = "Location to deploy hub-1"
   type        = string
-  //default     = "swedencentral"
-default = "westeurope"
+  default     = "swedencentral"
+  //default = "westeurope"
 }
 variable "location-hub-2" {
   description = "Location to deploy hub-2"
@@ -68,8 +68,8 @@ variable "location-onprem3" {
 variable "location-spoke-services" {
   description = "Location to deploy spoke-services"
   type        = string
-  //default     = "swedencentral"
-default = "westeurope"
+  default     = "swedencentral"
+  //default = "westeurope"
 }
 variable "username" {
   description = "Username for Virtual Machines"
