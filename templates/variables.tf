@@ -7,8 +7,8 @@ variable "location-vwan" {
 variable "location-vwan-we-hub" {
   description = "Location to deploy we hub"
   type        = string
-  //default     = "swedencentral"
-  default = "westeurope"
+  default     = "swedencentral"
+  //default = "westeurope"
 }
 variable "location-vwan-useast-hub" {
   description = "Location to deploy we hub"
