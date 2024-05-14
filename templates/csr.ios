@@ -1,3 +1,7 @@
+!license boot level network-advantage addon dna-advantage
+!do wr mem
+!do reload
+
 interface GigabitEthernet1
 ip address dhcp
 interface GigabitEthernet2

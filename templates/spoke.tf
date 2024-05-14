@@ -827,15 +827,15 @@ resource "azurerm_linux_virtual_machine" "nva-csr-vm" {
   }
 
   plan {
-    name = "16_12_5-byol"
+    name = "17_13_01a-byol"
     publisher = "cisco"
-    product = "cisco-csr-1000v"
+    product = "cisco-c8000v-byol"
   }
 
   source_image_reference {
     publisher = "cisco"
-    offer = "cisco-csr-1000v"
-    sku = "16_12_5-byol"
+    offer = "cisco-c8000v-byol"
+    sku = "17_13_01a-byol"
     version = "latest"
   }
   os_disk {

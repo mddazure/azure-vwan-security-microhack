@@ -45,7 +45,7 @@ The lab consists of a Virtual WAN with Secured Hubs in West Europe and US East, 
 
 Each of the Spoke and Branch VNETs contains a Virtual Machine running a basic web site.
 
-The NVA VNET contains a Cisco CSR1000v router, which will be used to simulate an SD-WAN concentrator in a Spoke. During the course of the lab, an OPNSense Firewall will be deployed into the NVA VNET to secure outbound internet traffic.
+The NVA VNET contains a Cisco Catalyst 8000v router, which will be used to simulate an SD-WAN concentrator in a Spoke. During the course of the lab, an OPNSense Firewall will be deployed into the NVA VNET to secure outbound internet traffic.
 
 The Services VNET contains a Bastion instance `bastion-service` which is used to connect to VMs across the lab using the IP Connect function.
 
@@ -90,10 +90,10 @@ Steps:
   cd ./azure-vwan-security-microhack/templates
   ```
 
-- Accept the terms for the CSR1000v Marketplace offer:
+- Accept the terms for the Catalyst 8000v Marketplace offer:
   
   ```
-  az vm image terms accept --urn cisco:cisco-csr-1000v:16_12_5-byol:latest
+  az vm image terms accept --urn cisco:cisco-c8000v-byol:17_13_01a-byol:latest
   ```
 
 - Initialize terraform and download the azurerm resource provider:
@@ -132,7 +132,7 @@ After the Terraform deployment concludes successfully, the following has been de
   - Four Spoke VNETs, each containing a Virtual Machine running a simple web site.
   - Three Onprem VNETs each containing a Virtual Machine running a simple web site and a VNET Gateway.
   - A Services VNET containing a Bastion Host.
-  - An NVA VNET containing a Cisco CSR1000v router.
+  - An NVA VNET containing a Cisco Catalyst 8000v router.
 - A resource group named **vwan-security-microhack-hub-rg** containing:
   - A Virtual WAN resource with two Hubs, each containing an Azure Firewall and a VPN Gateway.
   - A parent firewall policy and child policies for each region.
@@ -155,7 +155,7 @@ You may log on to each VM through the Bastion instance in the Services VNET. Nav
 
 Open a command prompt and type `curl localhost`. The response will be the VM name. 
 
-:exclamation: Connect to nva-csr-vm (the CSR1000v Cisco router) through Serial console from the VM blade in stead of through Bastion. This access method is independent from network connectivity to the VM and avoids the risk of being locked out during configuration changes.
+:exclamation: Connect to nva-csr-vm (the Catalyst 8000v Cisco router) through Serial console from the VM blade in stead of through Bastion. This access method is independent from network connectivity to the VM and avoids the risk of being locked out during configuration changes.
 
 :exclamation: The resources deployed in this lab incur a combined charge of around $170 per day. To help save costs, Auto-shutdown is configured to de-allocate all VMs at 19.00 CET. The Templates directory also contains Powershell scripts to manually suspend and restart the Azure Firewall instances in both Hubs, to help save costs further.
 
@@ -394,12 +394,12 @@ Observe log entries for requests sourced from 192.168.1.133 and 192.168.1.134: t
 
 # Scenario 3: SDWAN through NVA in Spoke
 
-You will now connect an SD-WAN connection to the Cisco CSR1000v router in nva-vnet. The router will dynamically advertise SD-WAN remote IP space to the West Europe Hub via BGP.
+You will now connect an SD-WAN connection to the Cisco Catalyst 8000v router in nva-vnet. The router will dynamically advertise SD-WAN remote IP space to the West Europe Hub via BGP.
 
 ![image](images/sd-wan.png)
 
-## Task 1: Configure CSR1000v NVA
-The CSR1000v NVA is deployed in nva-vnet as nva-csr-vm, but it still needs to be configured. The Cisco IOS configuration is contained in [csr.ios](/templates/csr.ios). The public IP addresses of vnet-gw-onprem3 need to be inserted into the ios configuration, and then the configuration must be copied into the CSR1000v through its command line interface.
+## Task 1: Configure Catalyst 8000v NVA
+The Catalyst 8000v NVA is deployed in nva-vnet as nva-csr-vm, but it still needs to be configured. The Cisco IOS configuration is contained in [csr.ios](/templates/csr.ios). The public IP addresses of vnet-gw-onprem3 need to be inserted into the ios configuration, and then the configuration must be copied into the Catalyst 8000v through its command line interface.
 
 - Obtain the IP addresses of `vnet-gw-onprem3-pubip-1` and `vnet-gw-onprem3-pubip-2`, either from the portal, or from Cloud Shell through:
 
@@ -418,6 +418,16 @@ The CSR1000v NVA is deployed in nva-vnet as nva-csr-vm, but it still needs to be
    Use Serial console in the portal as this does not rely on network connectivity in the VNET. Serial console is under Support + troubleshooting in the Virtual Machine blade.
 
 - Enter Enable mode by typing `en` at the prompt, then enter Configuration mode by typing `conf t`.
+
+- Activate the Crypto feature set by copying these lines into the console:
+```
+license boot level network-advantage addon dna-advantage
+do wr mem
+do reload
+```
+This will reboot the device. 
+
+- Log in again via Serial console. Enter Enable mode by typing `en` at the prompt, then enter Configuration mode by typing `conf t`.
 
 - Copy and paste the configuration from the modified csr.ios file into the Serial console window, one block at a time.
 
@@ -495,9 +505,9 @@ az network nic show-effective-route-table -g vwan-security-microhack-spoke-rg -n
 What is the next hop for 0.0.0.0/0?
 
 # Scenario 4: Internet through Firewall in Spoke
-You will now deploy an OPNsense firewall into the nva-vnet. Outbound internet traffic from Spokes, Branches and SDWAN will be directed through the CSR1000v router and through the OPNsense firewall, in stead of through the Hub firewalls.
+You will now deploy an OPNsense firewall into the nva-vnet. Outbound internet traffic from Spokes, Branches and SDWAN will be directed through the Catalyst 8000v router and through the OPNsense firewall, in stead of through the Hub firewalls.
 
-The CSR1000v router will attract outbound traffic by advertising a default route into the WE Hub via BGP. It will route that traffic to the OPNSense firewall. The firewall will send it to the internet.
+The Catalyst 8000v router will attract outbound traffic by advertising a default route into the WE Hub via BGP. It will route that traffic to the OPNSense firewall. The firewall will send it to the internet.
 
 :point_right: Another solution would be to advertise the default route directly from the firewall to the Hub (OPNsense supports BGP through a plugin). However, running dynamic routing on a firewall is not considered good practice. 
 
@@ -562,7 +572,7 @@ In the left hand bar, now click Rules -> LAN and **+** on the right hand side in
 
 The firewall is now configured to Allow and Source NAT all outbound traffic. Feel dree to experiment with otjher rules.
 
-## Task 3: Advertise default route from CSR1000v NVA
+## Task 3: Advertise default route from Catalyst 8000v NVA
 
 ### Configure nva-csr-vm
 The CSR will now advertise the default route both into the West Europe Hub and toward the SDWAN site. All internet traffic will flow to the CSR, and it will route it out it's "outside" interface, GigabitEthernet2.
@@ -603,7 +613,7 @@ Note that the default route points directly to Internet.
 
 ### User Defined Routes
 #### NVA VNET
-As we want outbound traffic to be secured by the OPNsense firewall, we need a UDR on the `nva-untrust-subnet`, to which the CSR1000v outside interface is attached, to push the traffic to the firewall's trusted or inside interface. However, the SDWAN IPSec tunnel traffic should not be firewalled, so the UDR must contain an explicit route to send traffic for `vnet-gw-onprem3` to the internet directly.
+As we want outbound traffic to be secured by the OPNsense firewall, we need a UDR on the `nva-untrust-subnet`, to which the Catalyst 8000v outside interface is attached, to push the traffic to the firewall's trusted or inside interface. However, the SDWAN IPSec tunnel traffic should not be firewalled, so the UDR must contain an explicit route to send traffic for `vnet-gw-onprem3` to the internet directly.
 
 ![image](images/nva-udr.png)
 
@@ -613,12 +623,12 @@ Navigate to `nva-vnet`, click subnets and select `nva-untrust-subnet`. Under Rou
 
 ![image](images/attach-nva-untrust-udr.png)
 
-Return traffic from the OPNsense firewall must be directed back to the CSR1000v's untrusted interface. Another UDR to achieve this is pre-provisioned in the `vwan-security-microhack-spoke-rg` Resource Group, but still needs to be attched to the OPNsense trusted subnet.
+Return traffic from the OPNsense firewall must be directed back to the Catalyst 8000v's untrusted interface. Another UDR to achieve this is pre-provisioned in the `vwan-security-microhack-spoke-rg` Resource Group, but still needs to be attched to the OPNsense trusted subnet.
 
 Navigate to `nva-vnet`, click subnets and select `opnsense-trust-subnet`. Under Route table select `opnsense-trust-udr`.
 
 #### Spoke VNETs
-With the Internet Routing Policy now disabled, the Hub no longer programs the default route in the Spoke VNETs - even though it learns a default route via BGP from the CSR1000v NVA in nva-vnet.
+With the Internet Routing Policy now disabled, the Hub no longer programs the default route in the Spoke VNETs - even though it learns a default route via BGP from the Catalyst 8000v NVA in nva-vnet.
 
 :point_right: Routing Intent is still enabled for private traffic, as we want spoke-to-spoke traffic secured dy Azure Firewall in both Hubs. The Default route table is therefore controlled by RI, and will not allow adding a default route manually.
 
