@@ -301,7 +301,7 @@ resource "azurerm_subnet_network_security_group_association" "nva-nsg-ass" {
 resource "azurerm_route_table" "nva-untrust-udr" {
   name = "nva-untrust-udr"
   location            = var.location-spoke-services
-  disable_bgp_route_propagation = true
+  bgp_route_propagation_enabled = true
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
   route {
     name = "vnet-gw-onprem3-pubip-1"
@@ -324,7 +324,7 @@ resource "azurerm_route_table" "opnsense-trust-udr" {
   name = "opnsense-trust-udr"
   location            = var.location-spoke-services
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  disable_bgp_route_propagation = true
+  bgp_route_propagation_enabled = true
   route {
     name = "all-via-csr"
     address_prefix = "0.0.0.0/0"
@@ -352,7 +352,7 @@ resource "azurerm_network_interface" "spoke-1-nic" {
   name                 = "spoke-1-nic"
   location             = var.location-spoke-1
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
+  ip_forwarding_enabled = false
   ip_configuration {
     name                          = "spoke-1-ipconfig"
     subnet_id                     = azurerm_subnet.spoke-1-vm-subnet.id
@@ -369,7 +369,7 @@ resource "azurerm_route_table" "spoke-we-udr" {
   name = "spoke-we-udr"
   location            = var.location-spoke-1
   resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  disable_bgp_route_propagation = true
+  bgp_route_propagation_enabled = true
   route {
     name = "default-via-hub"
     address_prefix = "0.0.0.0/0"
@@ -385,7 +385,7 @@ resource "azurerm_network_interface" "spoke-2-nic" {
   name                 = "spoke-2-nic"
   location             = var.location-spoke-2
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
+  ip_forwarding_enabled = false
 
   ip_configuration {
     name                          = "spoke-2-ipconfig"
@@ -407,7 +407,7 @@ resource "azurerm_network_interface" "spoke-3-nic" {
   name                 = "spoke-3-nic"
   location             = var.location-spoke-3
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
+  ip_forwarding_enabled = false
 
   ip_configuration {
     name                          = "spoke-3-ipconfig"
@@ -429,7 +429,7 @@ resource "azurerm_network_interface" "spoke-4-nic" {
   name                 = "spoke-4-nic"
   location             = var.location-spoke-4
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
+  ip_forwarding_enabled = false
 
   ip_configuration {
     name                          = "spoke-4"
@@ -453,7 +453,7 @@ resource "azurerm_network_interface" "spoke-addc-1-nic" {
   name                 = "spoke-addc-1-nic"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
+  ip_forwarding_enabled = false
 
   ip_configuration {
     name                          = "addc-1-ipconfig"
@@ -715,7 +715,7 @@ resource "azurerm_network_interface" "nva-iptables-vm-nic-1" {
   name                 = "nva-iptables-vm-nic-1"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = true
+  ip_forwarding_enabled = true
   ip_configuration {
     name                          = "nva-1-ipconfig"
     subnet_id                     = azurerm_subnet.untrust-subnet.id
@@ -779,7 +779,7 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-1" {
   name                 = "nva-csr-vm-nic-1"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = true
+  ip_forwarding_enabled = true
   ip_configuration {
     name                          = "nva-csr-1-ipconfig"
     subnet_id                     = azurerm_subnet.nva-trust-subnet.id
@@ -796,7 +796,7 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-2" {
   name                 = "nva-csr-vm-nic-2"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = true
+  ip_forwarding_enabled = true
   ip_configuration {
     name                          = "nva-csr-2-ipconfig"
     subnet_id                     = azurerm_subnet.nva-untrust-subnet.id

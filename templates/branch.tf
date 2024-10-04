@@ -120,7 +120,7 @@ resource "azurerm_network_interface" "onprem-nic" {
   name                 = "onprem-nic"
   location             = var.location-onprem
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
+  ip_forwarding_enabled = false
 
   ip_configuration {
     name                          = "onprem-ipconfig"
@@ -142,7 +142,7 @@ resource "azurerm_network_interface" "onprem2-nic" {
   name                 = "onprem2-nic"
   location             = var.location-onprem2
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
+  ip_forwarding_enabled = false
 
   ip_configuration {
     name                          = "onprem2-ipconfig"
@@ -163,7 +163,7 @@ resource "azurerm_network_interface" "onprem3-nic" {
   name                 = "onprem3-nic"
   location             = var.location-onprem3
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  enable_ip_forwarding = false
+  ip_forwarding_enabled = false
 
   ip_configuration {
     name                          = "onprem3-ipconfig"
