@@ -21,7 +21,7 @@ resource "azurerm_firewall_policy" "microhack-fw-parent-policy" {
     name = "microhack-fw-parent-policy"
     location = var.location-vwan-we-hub
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
-    sku = "Premium"
+    sku = "Basic"
 
 }
 
@@ -30,7 +30,7 @@ resource "azurerm_firewall_policy" "microhack-fw-we-child-policy" {
     location = var.location-vwan-we-hub
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     base_policy_id = azurerm_firewall_policy.microhack-fw-parent-policy.id
-    sku = "Premium"
+    sku = "Basic"
   
 }
 
@@ -39,7 +39,7 @@ resource "azurerm_firewall_policy" "microhack-fw-useast-child-policy" {
     location = var.location-vwan-we-hub
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     base_policy_id = azurerm_firewall_policy.microhack-fw-parent-policy.id
-    sku = "Premium"
+    sku = "Basic"
 }
 
 resource "azurerm_firewall_policy_rule_collection_group" "parent-we-useast-rule-coll-grp" {

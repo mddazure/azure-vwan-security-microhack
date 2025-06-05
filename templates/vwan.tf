@@ -29,7 +29,7 @@
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     location            = var.location-vwan-we-hub
     sku_name = "AZFW_Hub"
-    sku_tier = "Premium"
+    sku_tier = "Basic"
     virtual_hub {
       virtual_hub_id = azurerm_virtual_hub.microhack-we-hub.id
       public_ip_count = 1
@@ -89,7 +89,7 @@
     resource_group_name = azurerm_resource_group.vwan-microhack-hub-rg.name
     location            = var.location-vwan-useast-hub
     sku_name = "AZFW_Hub"
-    sku_tier = "Premium"
+    sku_tier = "Basic"
     virtual_hub {
       virtual_hub_id = azurerm_virtual_hub.microhack-useast-hub.id
       public_ip_count = 1

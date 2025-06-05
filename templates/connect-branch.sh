@@ -1,4 +1,4 @@
-az extension add --name virtual-wan
+#az extension add --name virtual-wan
 
 echo "# VNETGW: Get parameters from onprem vnet gateway"
 vnetgwtunnelip1=$(az network vnet-gateway show -n vnet-gw-onprem -g vwan-security-microhack-spoke-rg --query "bgpSettings.bgpPeeringAddresses[0].tunnelIpAddresses[0]" --output tsv)
