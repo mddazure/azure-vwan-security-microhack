@@ -66,4 +66,12 @@ resource "azurerm_public_ip" "vnet-gw-onprem3-pubip-1" {
     local_network_gateway_id = azurerm_local_network_gateway.lng-csr.id
     shared_key = "Microhack2023"
     enable_bgp = true
+    ipsec_policy {
+      dh_group = "DHGroup14"
+      ike_encryption = "AES256"
+      ike_integrity = "SHA256"
+      ipsec_encryption = "AES256"
+      ipsec_integrity = "SHA256"
+      pfs_group = "None"
+    }
   }

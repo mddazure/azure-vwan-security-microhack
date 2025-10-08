@@ -16,7 +16,7 @@ ip route 192.168.0.0 255.255.255.0 172.16.20.1
 crypto ikev2 proposal azure-proposal-connectionS1HubCSR 
  encryption aes-cbc-256 aes-cbc-128
  integrity sha1 sha256
- group 2
+ group 14
 !
 crypto ikev2 policy azure-policy-connectionS1HubCSR 
  proposal azure-proposal-connectionS1HubCSR
