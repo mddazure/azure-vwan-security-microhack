@@ -6,6 +6,7 @@ interface GigabitEthernet1
 ip address dhcp
 interface GigabitEthernet2
 ip address dhcp
+no shutdown
 !default route pointing to GigE2 which has public IP
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet2 172.16.20.33
 !remove default route pointing to GigE1
