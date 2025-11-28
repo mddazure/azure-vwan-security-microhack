@@ -90,7 +90,7 @@ resource "azurerm_virtual_network" "spoke-3-vnet" {
   tags = {
     environment = "spoke-3"
     deployment  = "terraform"
-    microhack    = "vwan"
+    microhack    = "vwan-security"
   }
 }
 #######################################################################
@@ -762,10 +762,10 @@ resource "azurerm_linux_virtual_machine" "nva-iptables-vm" {
   }
 }*/
 #######################################################################
-## Create Network Interface - nva-csr-vm
+## Create Network Interface - nva-csr-vm1
 #######################################################################
-resource "azurerm_public_ip" "nva-csr-vm-pub-ip"{
-    name                 = "nva-csr-vm-pub-ip"
+resource "azurerm_public_ip" "nva-csr-vm1-pub-ip"{
+    name                 = "nva-csr-vm1-pub-ip"
     location             = var.location-spoke-services
     resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
     allocation_method   = "Static"
@@ -775,8 +775,8 @@ resource "azurerm_public_ip" "nva-csr-vm-pub-ip"{
       microhack    = "vwan-security"
     }
 }
-resource "azurerm_network_interface" "nva-csr-vm-nic-1" {
-  name                 = "nva-csr-vm-nic-1"
+resource "azurerm_network_interface" "nva-csr-vm1-nic-1" {
+  name                 = "nva-csr-vm1-nic-1"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   ip_forwarding_enabled = true
@@ -792,8 +792,8 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-1" {
     microhack    = "vwan-security"
   }
 }
-resource "azurerm_network_interface" "nva-csr-vm-nic-2" {
-  name                 = "nva-csr-vm-nic-2"
+resource "azurerm_network_interface" "nva-csr-vm1-nic-2" {
+  name                 = "nva-csr-vm1-nic-2"
   location             = var.location-spoke-services
   resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
   ip_forwarding_enabled = true
@@ -802,7 +802,7 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-2" {
     subnet_id                     = azurerm_subnet.nva-untrust-subnet.id
     private_ip_address_allocation = "Static"
     private_ip_address = "172.16.20.36"
-    public_ip_address_id = azurerm_public_ip.nva-csr-vm-pub-ip.id
+    public_ip_address_id = azurerm_public_ip.nva-csr-vm1-pub-ip.id
   }
   tags = {
     environment = "nva"
@@ -811,13 +811,115 @@ resource "azurerm_network_interface" "nva-csr-vm-nic-2" {
   }
 }
 #######################################################################
-## Create Virtual Machine - CSR
+## Create Virtual Machine - CSR VM1
 #######################################################################
-resource "azurerm_linux_virtual_machine" "nva-csr-vm" {
-  name                  = "nva-csr-vm"
+resource "azurerm_linux_virtual_machine" "nva-csr-vm1" {
+  name                  = "nva-csr-vm1"
   location              = var.location-spoke-services
   resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
-  network_interface_ids = [azurerm_network_interface.nva-csr-vm-nic-1.id, azurerm_network_interface.nva-csr-vm-nic-2.id]
+  network_interface_ids = [azurerm_network_interface.nva-csr-vm1-nic-1.id, azurerm_network_interface.nva-csr-vm1-nic-2.id]
+  size               = var.vmsize
+  admin_username = var.username
+  admin_password = var.password
+  disable_password_authentication = false
+  boot_diagnostics {
+    
+  }
+
+  plan {
+    name = "17_13_01a-byol"
+    publisher = "cisco"
+    product = "cisco-c8000v-byol"
+  }
+
+  source_image_reference {
+    publisher = "cisco"
+    offer = "cisco-c8000v-byol"
+    sku = "17_13_01a-byol"
+    version = "latest"
+  }
+  os_disk {
+    name              = "nva-csr-vm1-osdisk"
+    caching           = "ReadWrite"
+    storage_account_type = "StandardSSD_LRS"
+  }  
+    tags = {
+    environment = "nva"
+    deployment  = "terraform"
+    microhack    = "vwan-security"
+  }
+}
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "nva-csr-vm1-shut" {
+  virtual_machine_id = azurerm_linux_virtual_machine.nva-csr-vm1.id
+  location           = var.location-spoke-services
+  enabled            = true
+
+  daily_recurrence_time = var.shutdown-time
+  timezone              = "W. Europe Standard Time"
+
+
+  notification_settings {
+    enabled         = false
+   
+  }
+ }
+#######################################################################
+## Create Network Interface - nva-csr-vm2
+#######################################################################
+resource "azurerm_public_ip" "nva-csr-vm2-pub-ip"{
+    name                 = "nva-csr-vm2-pub-ip"
+    location             = var.location-spoke-services
+    resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+    allocation_method   = "Static"
+    tags = {
+      environment = "nva"
+      deployment  = "terraform"
+      microhack    = "vwan-security"
+    }
+}
+resource "azurerm_network_interface" "nva-csr-vm2-nic-1" {
+  name                 = "nva-csr-vm2-nic-1"
+  location             = var.location-spoke-services
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  ip_forwarding_enabled = true
+  ip_configuration {
+    name                          = "nva-csr-1-ipconfig"
+    subnet_id                     = azurerm_subnet.nva-trust-subnet.id
+    private_ip_address_allocation = "Static"
+    private_ip_address = "172.16.20.5"
+  }
+  tags = {
+    environment = "nva"
+    deployment  = "terraform"
+    microhack    = "vwan-security"
+  }
+}
+resource "azurerm_network_interface" "nva-csr-vm2-nic-2" {
+  name                 = "nva-csr-vm2-nic-2"
+  location             = var.location-spoke-services
+  resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  ip_forwarding_enabled = true
+  ip_configuration {
+    name                          = "nva-csr-2-ipconfig"
+    subnet_id                     = azurerm_subnet.nva-untrust-subnet.id
+    private_ip_address_allocation = "Static"
+    private_ip_address = "172.16.20.37"
+    public_ip_address_id = azurerm_public_ip.nva-csr-vm2-pub-ip.id
+  }
+  tags = {
+    environment = "nva"
+    deployment  = "terraform"
+    microhack    = "vwan-security"
+  }
+}
+#######################################################################
+## Create Virtual Machine - CSR VM2
+#######################################################################
+resource "azurerm_linux_virtual_machine" "nva-csr-vm2" {
+  name                  = "nva-csr-vm2"
+  location              = var.location-spoke-services
+  resource_group_name   = azurerm_resource_group.vwan-microhack-spoke-rg.name
+  network_interface_ids = [azurerm_network_interface.nva-csr-vm2-nic-1.id, azurerm_network_interface.nva-csr-vm2-nic-2.id]
   size               = var.vmsize
   admin_username = var.username
   admin_password = var.password
@@ -849,8 +951,8 @@ resource "azurerm_linux_virtual_machine" "nva-csr-vm" {
     microhack    = "vwan-security"
   }
 }
-resource "azurerm_dev_test_global_vm_shutdown_schedule" "nva-csr-vm-shut" {
-  virtual_machine_id = azurerm_linux_virtual_machine.nva-csr-vm.id
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "nva-csr-vm2-shut" {
+  virtual_machine_id = azurerm_linux_virtual_machine.nva-csr-vm2.id
   location           = var.location-spoke-services
   enabled            = true
 
@@ -863,4 +965,3 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "nva-csr-vm-shut" {
    
   }
  }
-
