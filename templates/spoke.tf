@@ -33,7 +33,7 @@ resource "azurerm_subnet" "bastion-spoke-1-subnet" {
 }
 resource "azurerm_network_security_group" "spoke-1-nsg"{
     name = "spoke-1-nsg"
-    location             = var.location-spoke-services
+    location             = var.location-spoke-1
     resource_group_name  = azurerm_resource_group.vwan-microhack-spoke-rg.name
     security_rule = [  ]
         tags = {
@@ -394,7 +394,7 @@ resource "azurerm_network_interface" "spoke-2-nic" {
   }
 
   tags = {
-    environment = "spoke-1"
+    environment = "spoke-2"
     deployment  = "terraform"
     microhack    = "vwan-security"
   }

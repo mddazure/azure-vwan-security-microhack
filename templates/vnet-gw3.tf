@@ -51,7 +51,7 @@ resource "azurerm_public_ip" "vnet-gw-onprem3-pubip-1" {
     name = "lng-csr"
     location = var.location-onprem3
     resource_group_name = azurerm_resource_group.vwan-microhack-spoke-rg.name
-    gateway_address = azurerm_public_ip.nva-csr-vm-pub-ip.ip_address
+    gateway_address = azurerm_public_ip.nva-csr-vm1-pub-ip.ip_address
     bgp_settings {
       asn = 64000
       bgp_peering_address = "1.1.1.1"
